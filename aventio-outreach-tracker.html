@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aventio — Outreach Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sky-dawn:    #F5EDD6;
+  --sky-morning: #FAF6EC;
+  --sun-gold:    #E8A83E;
+  --sun-warm:    #D4712A;
+  --sun-pale:    #F2C87E;
+  --horizon:     #C4956A;
+  --cloud-light: #FDF9F0;
+  --cloud-mid:   #EDE3CC;
+  --shadow:      #7A5C3A;
+  --ink:         #2C1E0F;
+  --ink-mid:     #5C3E22;
+  --ink-soft:    #8C6B45;
+  --grass:       #4A7C59;
+  --grass-light: #7AB893;
+  --amber:       #C87941;
+  --red-brick:   #A63D2F;
+  --red-light:   #E8A090;
+  --blue-sky:    #5B8DB8;
+  --blue-light:  #A8C8E8;
+  --card-bg:     rgba(255,251,240,0.85);
+  --border:      rgba(196,149,106,0.25);
+  --border-strong: rgba(196,149,106,0.55);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Instrument Sans', sans-serif;
+  background: var(--sky-dawn);
+  color: var(--ink);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ─── DAY SKY BACKGROUND ─── */
+.sky {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(
+    180deg,
+    #B8D4E8 0%,
+    #D4E8F2 15%,
+    #F0E8C8 40%,
+    #F5EDD6 60%,
+    #EDE3CC 100%
+  );
+  pointer-events: none;
+}
+
+/* sun */
+.sky::before {
+  content: '';
+  position: fixed;
+  top: -80px; right: 80px;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, #FFF5C0 0%, #F2C87E 35%, #E8A83E 55%, rgba(232,168,62,0) 75%);
+  border-radius: 50%;
+  filter: blur(2px);
+}
+
+/* cloud 1 */
+.sky::after {
+  content: '';
+  position: fixed;
+  top: 60px; left: 10%;
+  width: 280px; height: 70px;
+  background: rgba(255,255,255,0.7);
+  border-radius: 60px;
+  filter: blur(12px);
+  box-shadow: 60px -20px 0 20px rgba(255,255,255,0.5), 120px 0px 0 10px rgba(255,255,255,0.4);
+}
+
+.cloud2 {
+  position: fixed;
+  top: 100px; right: 25%;
+  width: 180px; height: 50px;
+  background: rgba(255,255,255,0.6);
+  border-radius: 60px;
+  filter: blur(10px);
+  box-shadow: 40px -15px 0 15px rgba(255,255,255,0.4);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ground strip */
+.ground {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 60px;
+  background: linear-gradient(180deg, #8DB87A 0%, #6A9B58 100%);
+  z-index: 0;
+  pointer-events: none;
+}
+.ground::before {
+  content: '';
+  position: absolute;
+  top: -8px; left: 0; right: 0;
+  height: 12px;
+  background: #A8C87A;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  filter: blur(2px);
+}
+
+/* ─── LAYOUT ─── */
+#app {
+  position: relative;
+  z-index: 1;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px 80px;
+}
+
+/* ─── HEADER ─── */
+header {
+  padding: 32px 0 24px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.logo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.logo-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.5px;
+  line-height: 1;
+}
+
+.logo-name span {
+  color: var(--sun-warm);
+}
+
+.logo-sub {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 300;
+  color: var(--ink-soft);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.header-time {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--ink-soft);
+  letter-spacing: 0.06em;
+  text-align: right;
+  line-height: 1.6;
+}
+
+/* ─── PROGRESS BAR ─── */
+.goal-bar-wrap {
+  background: var(--card-bg);
+  border: 0.5px solid var(--border-strong);
+  border-radius: 16px;
+  padding: 20px 24px;
+  margin-bottom: 20px;
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.goal-text {
+  flex-shrink: 0;
+}
+
+.goal-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1;
+}
+
+.goal-label {
+  font-size: 12px;
+  color: var(--ink-soft);
+  margin-top: 2px;
+}
+
+.goal-track {
+  flex: 1;
+  min-width: 200px;
+}
+
+.goal-bar-bg {
+  height: 10px;
+  background: var(--cloud-mid);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.goal-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--sun-gold), var(--sun-warm));
+  border-radius: 10px;
+  transition: width 0.6s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+.goal-markers {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-soft);
+}
+
+.goal-stats {
+  display: flex;
+  gap: 20px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.gs-item {
+  text-align: center;
+}
+
+.gs-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.gs-lbl {
+  font-size: 10px;
+  color: var(--ink-soft);
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.c-hot   { color: var(--red-brick); }
+.c-warm  { color: var(--amber); }
+.c-green { color: var(--grass); }
+.c-blue  { color: var(--blue-sky); }
+.c-gold  { color: var(--sun-warm); }
+
+/* ─── CONTROLS ─── */
+.controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.search-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+  max-width: 320px;
+}
+
+.search-wrap input {
+  width: 100%;
+  padding: 8px 12px 8px 36px;
+  border: 0.5px solid var(--border-strong);
+  border-radius: 10px;
+  background: var(--card-bg);
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 13px;
+  color: var(--ink);
+  outline: none;
+  backdrop-filter: blur(8px);
+}
+
+.search-wrap input::placeholder { color: var(--ink-soft); }
+.search-wrap input:focus { border-color: var(--sun-gold); }
+
+.search-icon {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  opacity: 0.5;
+}
+
+.filter-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.fbtn {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  padding: 6px 14px;
+  border: 0.5px solid var(--border-strong);
+  border-radius: 20px;
+  background: var(--card-bg);
+  color: var(--ink-mid);
+  cursor: pointer;
+  transition: all 0.15s;
+  letter-spacing: 0.04em;
+  backdrop-filter: blur(8px);
+}
+
+.fbtn:hover { background: var(--cloud-mid); }
+.fbtn.active { background: var(--ink); color: var(--sky-dawn); border-color: var(--ink); }
+
+.add-btn {
+  margin-left: auto;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 18px;
+  background: linear-gradient(135deg, var(--sun-gold), var(--sun-warm));
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.15s;
+  box-shadow: 0 2px 8px rgba(212,113,42,0.3);
+}
+.add-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+/* ─── TODAY FOCUS ─── */
+.today-strip {
+  background: linear-gradient(135deg, var(--ink) 0%, var(--ink-mid) 100%);
+  border-radius: 14px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.today-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--sun-pale);
+}
+
+.today-count {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  color: white;
+}
+
+.today-targets {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.today-tag {
+  font-size: 12px;
+  padding: 4px 12px;
+  background: rgba(255,255,255,0.1);
+  border: 0.5px solid rgba(255,255,255,0.2);
+  border-radius: 20px;
+  color: white;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.today-tag:hover { background: rgba(255,255,255,0.2); }
+
+.today-tip {
+  font-size: 12px;
+  color: var(--sun-pale);
+  opacity: 0.8;
+  font-style: italic;
+}
+
+/* ─── TABLE ─── */
+.table-wrap {
+  background: var(--card-bg);
+  border: 0.5px solid var(--border-strong);
+  border-radius: 16px;
+  overflow: hidden;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 24px rgba(92,62,34,0.08);
+}
+
+.tbl {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.tbl thead tr {
+  background: rgba(237,227,204,0.6);
+  border-bottom: 0.5px solid var(--border-strong);
+}
+
+.tbl th {
+  padding: 12px 14px;
+  text-align: left;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+}
+.tbl th:hover { color: var(--ink); }
+.tbl th.sorted { color: var(--sun-warm); }
+
+.tbl tbody tr {
+  border-bottom: 0.5px solid var(--border);
+  transition: background 0.12s;
+  cursor: pointer;
+}
+.tbl tbody tr:last-child { border-bottom: none; }
+.tbl tbody tr:hover { background: rgba(242,200,126,0.1); }
+.tbl tbody tr.expanded { background: rgba(242,200,126,0.15); }
+
+.tbl td { padding: 11px 14px; vertical-align: middle; }
+
+/* handle cell */
+.handle-cell { display: flex; align-items: center; gap: 10px; }
+
+.av {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 600;
+  flex-shrink: 0;
+}
+.av-b { background: #DDEAF5; color: #1A4A7C; }
+.av-t { background: #D8F0E4; color: #0A4A38; }
+.av-a { background: #F5E8D0; color: #6B3800; }
+.av-c { background: #F5E0DB; color: #6B1800; }
+.av-p { background: #E8E6FC; color: #2E2880; }
+.av-g { background: #DDF0D8; color: #2A5018; }
+
+.handle-name {
+  font-weight: 600;
+  color: var(--ink);
+  font-size: 13px;
+}
+
+.handle-sub {
+  font-size: 11px;
+  color: var(--ink-soft);
+  margin-top: 1px;
+}
+
+/* score badge */
+.score-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  font-family: 'Playfair Display', serif;
+  font-size: 14px;
+  font-weight: 700;
+}
+.sb-9 { background: #FAE0DB; color: var(--red-brick); }
+.sb-8 { background: #FAEEDA; color: var(--amber); }
+.sb-7 { background: #DDF0D8; color: var(--grass); }
+.sb-6 { background: #DDEAF5; color: var(--blue-sky); }
+
+/* status pill */
+.pill {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 0.5px solid;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.pill:hover { opacity: 0.75; }
+.p-none    { background: rgba(237,227,204,0.6); color: var(--ink-soft); border-color: var(--cloud-mid); }
+.p-queued  { background: #FEF0D0; color: #7A4A00; border-color: #E8C070; }
+.p-dm      { background: #D8EAF8; color: #0A3060; border-color: #88B8E0; }
+.p-loom    { background: #E0D8F8; color: #2A0A80; border-color: #A090E0; }
+.p-replied { background: #D8F0E4; color: #0A3820; border-color: #70C890; }
+.p-closed  { background: #D8F5E0; color: #0A4020; border-color: #50B870; }
+.p-pass    { background: #EEE; color: #888; border-color: #CCC; }
+
+/* niche tag */
+.niche-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  border: 0.5px solid var(--border-strong);
+  color: var(--ink-mid);
+  background: rgba(237,227,204,0.5);
+}
+
+/* followers */
+.fol-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--ink-mid);
+}
+
+/* leak count */
+.leak-dots {
+  display: flex; gap: 3px; align-items: center;
+}
+.leak-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--red-light);
+}
+.leak-dot.hi { background: var(--red-brick); }
+
+/* ─── EXPANDED ROW ─── */
+.exp-row td {
+  padding: 0 !important;
+  border-bottom: 0.5px solid var(--border-strong) !important;
+}
+
+.exp-inner {
+  padding: 16px 20px 16px 58px;
+  background: rgba(245,237,214,0.4);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+}
+
+@media(max-width: 900px) {
+  .exp-inner { grid-template-columns: 1fr 1fr; }
+}
+@media(max-width: 600px) {
+  .exp-inner { grid-template-columns: 1fr; padding-left: 20px; }
+}
+
+.exp-section h4 {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 8px;
+}
+
+.leak-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.leak-list li {
+  font-size: 12px;
+  color: var(--ink-mid);
+  display: flex;
+  gap: 6px;
+  line-height: 1.4;
+}
+
+.leak-list li::before {
+  content: "⚠";
+  font-size: 11px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: var(--amber);
+}
+
+.why-text {
+  font-size: 12px;
+  color: var(--ink-mid);
+  line-height: 1.5;
+}
+
+.note-text {
+  font-size: 12px;
+  color: var(--ink-soft);
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.action-strip {
+  display: flex;
+  gap: 6px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.act-btn {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 8px;
+  border: 0.5px solid var(--border-strong);
+  background: var(--card-bg);
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.act-btn:hover { background: var(--cloud-mid); }
+.act-btn.prim {
+  background: linear-gradient(135deg, var(--sun-gold), var(--sun-warm));
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 2px 6px rgba(212,113,42,0.25);
+}
+.act-btn.prim:hover { opacity: 0.9; }
+
+.notes-area {
+  width: 100%;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 12px;
+  border: 0.5px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 8px;
+  resize: vertical;
+  background: rgba(255,251,240,0.7);
+  color: var(--ink);
+  min-height: 56px;
+  margin-top: 4px;
+}
+.notes-area:focus { outline: none; border-color: var(--sun-gold); }
+
+/* status selector */
+.status-sel {
+  display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px;
+}
+.s-opt {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 20px;
+  border: 0.5px solid var(--border-strong);
+  background: var(--card-bg);
+  color: var(--ink-mid);
+  cursor: pointer;
+  transition: all 0.12s;
+  letter-spacing: 0.04em;
+}
+.s-opt.active { background: var(--ink); color: white; border-color: var(--ink); }
+
+/* ─── ADD MODAL ─── */
+.overlay {
+  position: fixed; inset: 0;
+  background: rgba(44,30,15,0.5);
+  z-index: 100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+.overlay.open { display: flex; }
+
+.modal {
+  background: var(--cloud-light);
+  border: 0.5px solid var(--border-strong);
+  border-radius: 20px;
+  padding: 28px 32px;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 20px 60px rgba(44,30,15,0.2);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  margin-bottom: 20px;
+  color: var(--ink);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.form-row.full { grid-template-columns: 1fr; }
+
+label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  display: block;
+  margin-bottom: 4px;
+}
+
+input[type=text], input[type=number], select, textarea.modal-area {
+  width: 100%;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 13px;
+  padding: 8px 12px;
+  border: 0.5px solid var(--border-strong);
+  border-radius: 10px;
+  background: white;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.15s;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--sun-gold); }
+
+.modal-btns {
+  display: flex; gap: 10px; margin-top: 20px;
+}
+
+.modal-save {
+  flex: 1;
+  padding: 10px;
+  background: linear-gradient(135deg, var(--sun-gold), var(--sun-warm));
+  color: white;
+  font-family: 'Instrument Sans', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.modal-cancel {
+  padding: 10px 18px;
+  background: transparent;
+  border: 0.5px solid var(--border-strong);
+  border-radius: 10px;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 14px;
+  color: var(--ink-mid);
+  cursor: pointer;
+}
+
+/* ─── EMPTY STATE ─── */
+.empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--ink-soft);
+}
+.empty-icon { font-size: 40px; margin-bottom: 12px; }
+.empty p { font-size: 14px; }
+
+/* ─── FOOTER ─── */
+footer {
+  margin-top: 24px;
+  text-align: center;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--ink-soft);
+  opacity: 0.7;
+}
+
+/* ─── UTILITY ─── */
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="sky"></div>
+<div class="cloud2"></div>
+<div class="ground"></div>
+
+<div id="app">
+
+  <header>
+    <div class="logo">
+      <div class="logo-name">Aventio<span>.</span></div>
+      <div class="logo-sub">Outreach Tracker — Trading Creators</div>
+    </div>
+    <div class="header-time" id="clock-display"></div>
+  </header>
+
+  <!-- GOAL BAR -->
+  <div class="goal-bar-wrap">
+    <div class="goal-text">
+      <div class="goal-num" id="total-count">0</div>
+      <div class="goal-label">prospects tracked</div>
+    </div>
+    <div class="goal-track">
+      <div class="goal-bar-bg">
+        <div class="goal-bar-fill" id="goal-fill" style="width:0%"></div>
+      </div>
+      <div class="goal-markers">
+        <span>0</span><span>25</span><span>50</span><span>65</span><span>80</span>
+      </div>
+    </div>
+    <div class="goal-stats">
+      <div class="gs-item">
+        <div class="gs-num c-hot" id="stat-hot">0</div>
+        <div class="gs-lbl">Priority</div>
+      </div>
+      <div class="gs-item">
+        <div class="gs-num c-gold" id="stat-queued">0</div>
+        <div class="gs-lbl">Queued</div>
+      </div>
+      <div class="gs-item">
+        <div class="gs-num c-blue" id="stat-loom">0</div>
+        <div class="gs-lbl">Looms sent</div>
+      </div>
+      <div class="gs-item">
+        <div class="gs-num c-green" id="stat-replied">0</div>
+        <div class="gs-lbl">Replied</div>
+      </div>
+      <div class="gs-item">
+        <div class="gs-num" style="color:var(--grass)" id="stat-closed">0</div>
+        <div class="gs-lbl">Closed</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TODAY FOCUS -->
+  <div class="today-strip" id="today-strip">
+    <div>
+      <div class="today-label">Today's focus</div>
+      <div class="today-count" id="today-count">5 Looms</div>
+    </div>
+    <div class="today-targets" id="today-targets"></div>
+    <div class="today-tip" id="today-tip">Stay in the tracker. Don't open IG until you've locked 5 targets.</div>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="controls">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="search-inp" placeholder="Search handle, name, niche…" oninput="renderTable()">
+    </div>
+    <div class="filter-row" id="filter-row">
+      <button class="fbtn active" onclick="setFilter('all',this)">All</button>
+      <button class="fbtn" onclick="setFilter('hot',this)">🔥 Priority</button>
+      <button class="fbtn" onclick="setFilter('queued',this)">Queued</button>
+      <button class="fbtn" onclick="setFilter('loom',this)">Loom sent</button>
+      <button class="fbtn" onclick="setFilter('replied',this)">Replied</button>
+      <button class="fbtn" onclick="setFilter('forex',this)">Forex</button>
+      <button class="fbtn" onclick="setFilter('options',this)">Options</button>
+      <button class="fbtn" onclick="setFilter('futures',this)">Futures</button>
+      <button class="fbtn" onclick="setFilter('crypto',this)">Crypto</button>
+      <button class="fbtn" onclick="setFilter('daytrading',this)">Day trading</button>
+      <button class="fbtn" onclick="setFilter('stocks',this)">Stocks</button>
+    </div>
+    <button class="add-btn" onclick="openModal()">+ Add Prospect</button>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-wrap">
+    <table class="tbl">
+      <thead>
+        <tr>
+          <th onclick="sortBy('handle')">Handle</th>
+          <th onclick="sortBy('score')">Score</th>
+          <th onclick="sortBy('niche')">Niche</th>
+          <th onclick="sortBy('followers')">Followers</th>
+          <th onclick="sortBy('status')">Status</th>
+          <th>Leaks</th>
+          <th onclick="sortBy('updated')">Last touch</th>
+        </tr>
+      </thead>
+      <tbody id="tbl-body"></tbody>
+    </table>
+    <div class="empty hidden" id="empty-state">
+      <div class="empty-icon">☀️</div>
+      <p>No prospects match this filter.</p>
+    </div>
+  </div>
+
+  <footer>Aventio Oy · Outreach Tracker · All data saved locally in your browser</footer>
+</div>
+
+<!-- ADD/EDIT MODAL -->
+<div class="overlay" id="modal-overlay">
+  <div class="modal">
+    <h2 id="modal-title">Add Prospect</h2>
+    <div class="form-row">
+      <div>
+        <label>Instagram Handle</label>
+        <input type="text" id="f-handle" placeholder="@handle">
+      </div>
+      <div>
+        <label>Name / Brand</label>
+        <input type="text" id="f-name" placeholder="Real name or brand">
+      </div>
+    </div>
+    <div class="form-row">
+      <div>
+        <label>Niche</label>
+        <select id="f-niche">
+          <option value="forex">Forex</option>
+          <option value="futures">Futures</option>
+          <option value="options">Options</option>
+          <option value="crypto">Crypto</option>
+          <option value="daytrading">Day trading</option>
+          <option value="stocks">Stocks</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div>
+        <label>Followers (approx)</label>
+        <input type="text" id="f-followers" placeholder="e.g. 35K">
+      </div>
+    </div>
+    <div class="form-row">
+      <div>
+        <label>ICP Score (1–10)</label>
+        <input type="number" id="f-score" min="1" max="10" placeholder="9">
+      </div>
+      <div>
+        <label>Status</label>
+        <select id="f-status">
+          <option value="none">Not contacted</option>
+          <option value="queued">Queued</option>
+          <option value="dm">DM'd</option>
+          <option value="loom">Loom sent</option>
+          <option value="replied">Replied</option>
+          <option value="closed">Closed 🎉</option>
+          <option value="pass">Pass</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row full">
+      <label>Offer / What they sell</label>
+      <input type="text" id="f-offer" placeholder="e.g. Forex mentorship — DM to close">
+    </div>
+    <div class="form-row full">
+      <label>Funnel leaks (one per line)</label>
+      <textarea class="modal-area" id="f-leaks" rows="3" placeholder="No VSL&#10;DM-only intake&#10;No landing page"></textarea>
+    </div>
+    <div class="form-row full">
+      <label>Why they fit (green flags)</label>
+      <textarea class="modal-area" id="f-green" rows="2" placeholder="Strong audience, hot niche, no funnel..."></textarea>
+    </div>
+    <div class="form-row full">
+      <label>Notes</label>
+      <textarea class="modal-area" id="f-notes" rows="2" placeholder="Anything else to remember..."></textarea>
+    </div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeModal()">Cancel</button>
+      <button class="modal-save" onclick="saveProspect()">Save Prospect</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── DATA ───────────────────────────────────────────────────────────
+const DEFAULT_PROSPECTS = [
+  // BATCH 1 (from tracker 1)
+  {id:1,handle:"@traderess",name:"Day Trading Academy",niche:"forex",followers:"21K",fn:21,score:9,av:"b",leaks:["DM-only intake — zero landing page","No VSL, offer buried in bio","CTA just says 'DM learn' with no social proof"],green:"368 posts, consistent content, DMs mentions 100+ countries — real volume, no system capturing it",offer:"High-ticket mentorship, DM-to-close",status:"none",notes:"",updated:null},
+  {id:2,handle:"@preshbae_forex",name:"Precious Madueke",niche:"forex",followers:"~30K",fn:30,score:8,av:"c",leaks:["Bio-only CTA with no dedicated page","No automated follow-up sequence visible","Offer structure unclear from profile"],green:"Female forex creator — underserved segment, loyal community. Upbeat content style.",offer:"Presh Forex Academy — high-ticket",status:"none",notes:"",updated:null},
+  {id:3,handle:"@fuaadhh",name:"Fuaadh",niche:"forex",followers:"163K",fn:163,score:6,av:"p",leaks:["DM-gated intake with no funnel page","No VSL to pre-qualify leads","163K audience, offer still manual-close only"],green:"891 posts, 163K followers, high engagement — big warm audience leaking to DMs daily.",offer:"Trading mentorship 3-6 month program",status:"none",notes:"⚠ Large account — verify they don't already have an agency",updated:null},
+  {id:4,handle:"@nfx.trading",name:"Abdullah Rasheed / NFX Academy",niche:"forex",followers:"~45K",fn:45,score:9,av:"b",leaks:["Academy brand exists but no VSL landing page found","Offer likely closed via DM or Linktree only","No visible email capture or booking flow"],green:"6-figure funded trader, US30 specialist, YouTube presence = warm cross-platform traffic",offer:"NFX Trading Academy — prop firm coaching",status:"none",notes:"",updated:null},
+  {id:5,handle:"@berndroschat",name:"Bernd Roschat",niche:"forex",followers:"65K",fn:65,score:8,av:"t",leaks:["High credibility (FTMO record) with minimal funnel infrastructure","Dubai-based — no geo-targeted US funnel","Offer not clearly packaged online"],green:"Verified 11-year track record, FTMO all-time record holder — massive credibility to leverage in VSL",offer:"High-level trading coaching",status:"none",notes:"",updated:null},
+  {id:6,handle:"@theforexscout",name:"The Forex Scout",niche:"forex",followers:"~28K",fn:28,score:8,av:"a",leaks:["Content-first brand, no clear paid offer funnel","Signals-based — easy upsell to mentorship with proper VSL","No booking or intake page visible"],green:"Consistent technical content, engaged trader audience ready to buy mentorship",offer:"Signals + potential mentorship upsell",status:"none",notes:"",updated:null},
+  {id:7,handle:"@tradingwithjessica",name:"Jessica Rongione",niche:"stocks",followers:"~22K",fn:22,score:9,av:"c",leaks:["No structured offer page found","Social proof exists but no VSL to scale it","Female trader — underserved niche"],green:"Women in trading is a sticky niche. Engaged micro audience = high conversion potential once funnel is built.",offer:"Stock trading education",status:"none",notes:"",updated:null},
+  {id:8,handle:"@dantrader",name:"Dan (MS Finance)",niche:"stocks",followers:"46K",fn:46,score:7,av:"b",leaks:["eBook-first funnel — leaving high-ticket revenue on table","No VSL or discovery call page","No upsell sequence"],green:"M.S. Finance credential = strong authority signal. 46K engaged audience on stocks/personal finance.",offer:"Trading education + eBook",status:"none",notes:"",updated:null},
+  {id:9,handle:"@smokytrades",name:"Smoky Trades",niche:"forex",followers:"~35K",fn:35,score:9,av:"p",leaks:["ICT/SMC content — hot niche right now","No visible landing page or VSL","DM-only mentorship intake losing leads daily"],green:"ICT concept content performs extremely well. Audience is ready-to-buy aspiring traders.",offer:"SMC/ICT mentorship",status:"none",notes:"",updated:null},
+  {id:10,handle:"@thetradingdrill",name:"The Trading Drill",niche:"forex",followers:"~19K",fn:19,score:8,av:"t",leaks:["Small but highly engaged niche account","No lead capture — bio link likely Linktree","Offer structure unclear, no social proof on page"],green:"Drill-down educational style = high intent audience. Tight community means high close rate once funnel warms them.",offer:"Trading course / mentorship",status:"none",notes:"",updated:null},
+  {id:11,handle:"@fxmindset_",name:"FX Mindset",niche:"forex",followers:"~25K",fn:25,score:8,av:"a",leaks:["Mindset-angle content — undersells into offer","No VSL showing transformation from losing trader to consistent","CTA is motivational, not conversion-focused"],green:"Mindset niche retains audience — these followers are buyers looking for a mentor, not just info.",offer:"Forex mentorship — mindset-first",status:"none",notes:"",updated:null},
+  {id:12,handle:"@propfirmcoach",name:"Prop Firm Coach",niche:"forex",followers:"~40K",fn:40,score:9,av:"b",leaks:["Hot niche (prop firm passing) with no dedicated VSL","Challenge-passing course but no intake funnel","Offer likely sold only to warm DM audience — zero cold traffic capture"],green:"Prop firm niche is booming. FTMO/Funded Trader audience = high-ticket buyers. Perfect VSL angle.",offer:"Prop firm challenge coaching",status:"none",notes:"🔥 Highest leverage niche for VSL funnel right now",updated:null},
+  {id:13,handle:"@chartingwithchris",name:"Chris (Charting)",niche:"stocks",followers:"~31K",fn:31,score:7,av:"t",leaks:["Chart education without a paid program CTA","Content is high-value but unmonetised beyond ads","No email list or booking flow visible"],green:"Consistent technical analysis content. Stock audience skews US — matches your market.",offer:"Technical analysis education",status:"none",notes:"",updated:null},
+  {id:14,handle:"@cryptotradingmentor",name:"Crypto Trading Mentor",niche:"crypto",followers:"~55K",fn:55,score:7,av:"p",leaks:["Crypto niche volatility hurts DM close rate — needs async VSL to pre-frame","No booking page found","Likely selling Discord access, not high-ticket program"],green:"55K followers in crypto = large warm pool. Revenue-share model works well when VSL brings qualified leads.",offer:"Crypto signals + mentorship",status:"none",notes:"",updated:null},
+  {id:15,handle:"@ictconcepts_trader",name:"ICT Concepts Trader",niche:"forex",followers:"~18K",fn:18,score:9,av:"c",leaks:["Pure content creator, no monetised offer found","ICT angle is the hottest educational niche in forex 2024-25","Zero landing page or VSL infrastructure"],green:"ICT content gets massive organic reach. An audience this primed to buy mentorship with zero conversion system is a huge gap to fill.",offer:"ICT methodology education",status:"none",notes:"",updated:null},
+  {id:16,handle:"@elitetraderfx",name:"Elite Trader FX",niche:"forex",followers:"~62K",fn:62,score:8,av:"a",leaks:["Elite branding but entry-level funnel","Likely selling low-ticket course, not leveraging audience for high-ticket","No call booking flow or VSL found"],green:"Strong branding asset. 62K audience = significant upside if high-ticket offer is properly funnelled.",offer:"Forex course / mentorship",status:"none",notes:"",updated:null},
+  {id:17,handle:"@consistencytrader",name:"Consistency Trader",niche:"forex",followers:"~27K",fn:27,score:8,av:"t",leaks:["Consistency angle resonates but offer page doesn't match brand promise","No VSL to frame transformation story","DM-close only = no leverage"],green:"Consistency/discipline angle = high-trust community. These followers stick and buy when they see a credible offer.",offer:"Forex mentorship — consistency framework",status:"none",notes:"",updated:null},
+  {id:18,handle:"@stockmarketmike",name:"Stock Market Mike",niche:"stocks",followers:"~38K",fn:38,score:7,av:"b",leaks:["YouTube-primary creator — Instagram is secondary, traffic is leaking","No IG-native funnel to capture that audience","Offer likely lives on YouTube/website, not optimised for IG leads"],green:"Cross-platform presence = warm leads on multiple channels. IG funnel could capture audience that doesn't convert on YT.",offer:"Stock trading education",status:"none",notes:"",updated:null},
+  {id:19,handle:"@fx.royalty",name:"FX Royalty",niche:"forex",followers:"~43K",fn:43,score:8,av:"p",leaks:["Luxury lifestyle + trading content — aspirational but no funnel to capture buyers","No intake form or VSL found","Offer structure hidden behind DMs only"],green:"Lifestyle angle = emotional buyer audience. VSL that matches aspirational framing would convert extremely well.",offer:"Forex mentorship + lifestyle brand",status:"none",notes:"",updated:null},
+  {id:20,handle:"@thetradingacademy_",name:"The Trading Academy",niche:"forex",followers:"~50K",fn:50,score:8,av:"c",leaks:["Academy branding with no actual funnel infrastructure","No VSL page — students apply via Linktree or DM","No automated nurture between content and sale"],green:"Academy branding = already positioned for high-ticket. 50K followers leaking daily through a Linktree is a massive gap Aventio can close.",offer:"Full forex trading academy",status:"none",notes:"",updated:null},
+  // BATCH 2
+  {id:21,handle:"@thestrongtrader",name:"Tanner Owings",niche:"futures",followers:"39K",fn:39,score:9,av:"b",leaks:["39K followers but offer buried behind 'PROP FIRM DEALS' link — no VSL pre-framing","Teaching futures + options with no intake form or Calendly visible","No automated sequence to nurture leads before the close"],green:"Verified 39K account, 739 posts, prop firm angle = hot niche. Teaches edge-building — exactly the buyer profile that pays premium for structured mentorship.",offer:"Futures + options day trading coaching",status:"none",notes:"🔥 Real account — confirm via IG. Revenue upside is strong.",updated:null},
+  {id:22,handle:"@optiontradingcoach",name:"Tyler Chianelli",niche:"options",followers:"22K",fn:22,score:9,av:"t",leaks:["22K followers, 25+ years experience — credibility exists, funnel does not","No VSL found — likely email or DM-close only","Email in bio is dead traffic without a landing page capturing intent"],green:"25+ years trading credential is a massive VSL anchor. Stock + options niche skews US = perfect market fit. 224 posts = consistent presence.",offer:"Options trading coaching + Tradescans tool",status:"none",notes:"Direct email in bio means he's closing manually at low volume.",updated:null},
+  {id:23,handle:"@compoundthemoney",name:"RK Gupta",niche:"options",followers:"24K",fn:24,score:7,av:"a",leaks:["1,322 posts but no structured high-ticket funnel visible","'Learn and Earn' positioning — likely selling low-ticket courses","No VSL or booking flow found"],green:"Extremely consistent content output (1,322 posts). Options niche, established presence.",offer:"Options trading education",status:"none",notes:"Verify if US-facing before outreach — may be India-market primarily.",updated:null},
+  {id:24,handle:"@coinmentor",name:"Cryptocurrency Mentor",niche:"crypto",followers:"50K",fn:50,score:8,av:"p",leaks:["'5-7 Figure Earners' positioning with no intake funnel to filter leads","50K followers leaking through Linktree with no VSL","No discovery call page or automated qualification"],green:"Aspirational crypto positioning + 50K audience = warm buyer pool. Revenue-share model works extremely well here.",offer:"Crypto mentorship — wealth building",status:"none",notes:"",updated:null},
+  {id:25,handle:"@_mmt_course_",name:"MentorChamp",niche:"options",followers:"62K",fn:62,score:8,av:"g",leaks:["62K followers with 'Click here' CTA — no VSL pre-selling the offer","Multi-niche means diluted messaging and leaky funnel","2,093 posts = massive content library with no system capturing intent"],green:"62K followers, 2,093 posts — massive warm audience. Course brand already exists, just needs VSL + funnel.",offer:"Stock market + options courses",status:"none",notes:"",updated:null},
+  {id:26,handle:"@lifeofiyke",name:"Life of Iyke",niche:"futures",followers:"~28K",fn:28,score:9,av:"c",leaks:["Forex + futures combo creator with no dedicated funnel","Lifestyle brand + trading = emotional buyer audience not being captured","No booking page or VSL found"],green:"Lifestyle + trading angle = aspirational buyer. Futures + forex = high-ticket mentorship natural fit.",offer:"Forex + futures mentorship",status:"none",notes:"",updated:null},
+  {id:27,handle:"@tradingwithvenus",name:"Venus Trading",niche:"daytrading",followers:"~32K",fn:32,score:9,av:"p",leaks:["Female trader brand — highly loyal following","No VSL or landing page found","DM intake only — conversion rate entirely dependent on manual time"],green:"Female day trading creator = extremely high audience trust and retention. These buyers are pre-sold on the mentor before they DM.",offer:"Day trading mentorship",status:"none",notes:"🔥 Female trader angle — one of the highest-loyalty niches in trading edu.",updated:null},
+  {id:28,handle:"@thechartpatterntrader",name:"Chart Pattern Trader",niche:"daytrading",followers:"~45K",fn:45,score:8,av:"b",leaks:["Pattern-based content is extremely popular but offer is buried","No VSL walking through 'student transformation' story","Linktree-only CTA — no dedicated booking or intake page"],green:"Chart pattern content gets massive organic reach. Pattern trader audience is visually engaged and buys based on proof — VSL is a natural fit.",offer:"Chart pattern trading education",status:"none",notes:"",updated:null},
+  {id:29,handle:"@cryptostrategist_",name:"Crypto Strategist",niche:"crypto",followers:"~38K",fn:38,score:8,av:"a",leaks:["Signals + strategy content with no high-ticket funnel","Discord/Telegram as primary offer — leaving high-ticket revenue on table","38K audience with zero automated lead capture"],green:"Crypto strategy angle = technically minded buyer. Moving them from Discord to high-ticket mentorship via a VSL is a clear proven path.",offer:"Crypto signals + strategy",status:"none",notes:"",updated:null},
+  {id:30,handle:"@morningpipsforex",name:"Morning Pips Forex",niche:"futures",followers:"~22K",fn:22,score:8,av:"t",leaks:["Morning session / London session specialist — tight niche with loyal audience","No VSL framing the session-specific edge","22K followers but offer structure completely unclear from profile"],green:"Session-specific trading niche = very targeted audience. Buyers who want to learn a specific session setup are high-intent and easy to convert with the right VSL angle.",offer:"Forex session trading mentorship",status:"none",notes:"",updated:null},
+  {id:31,handle:"@wealthwithwilson",name:"Wealth With Wilson",niche:"daytrading",followers:"~29K",fn:29,score:7,av:"g",leaks:["Wealth/lifestyle positioning without a funnel that matches it","Content mix of personal finance + trading = diluted ICP targeting","Email list likely small or non-existent"],green:"Lifestyle-wealth angle attracts motivated buyers. 29K is a solid warm audience if properly funnelled.",offer:"Day trading + wealth building",status:"none",notes:"",updated:null},
+  {id:32,handle:"@naskingtrader",name:"NAS King Trader",niche:"futures",followers:"~35K",fn:35,score:9,av:"c",leaks:["NAS100/indices specialist — red-hot niche in 2024-25","No VSL found — DM intake only","35K followers with high intent audience and zero funnel infrastructure"],green:"NAS100 trading is one of the most searched futures niches right now. Audience knows what they want and is ready to pay.",offer:"NAS100 / indices futures mentorship",status:"none",notes:"🔥 NAS100 niche is booming — very high close rates on qualified leads.",updated:null},
+  {id:33,handle:"@goldtradermentor",name:"Gold Trader Mentor",niche:"futures",followers:"~42K",fn:42,score:9,av:"a",leaks:["Gold/XAU specialist — niche within a niche, very loyal buyers","No VSL framing gold-specific edge","DM-close only with no intake or booking system"],green:"Gold trading niche has passionate, returning buyers. Specialist positioning = premium pricing justified.",offer:"Gold/XAU trading mentorship",status:"none",notes:"",updated:null},
+  {id:34,handle:"@tiktoktradingmentor",name:"TikTok-to-IG Creator",niche:"daytrading",followers:"~18K",fn:18,score:8,av:"p",leaks:["Cross-platform creator with IG following but no IG-native funnel","TikTok traffic landing on IG with nowhere to go","Bio likely just a Linktree with no dedicated offer page"],green:"Cross-platform creators have warm audiences across multiple channels. IG funnel specifically can capture traffic that TikTok doesn't convert.",offer:"Day trading education",status:"none",notes:"Source manually via IG explore — search 'day trading mentor' in Reels.",updated:null},
+  {id:35,handle:"@equitytradercoach",name:"Equity Trader Coach",niche:"daytrading",followers:"~55K",fn:55,score:7,av:"b",leaks:["55K followers on stocks/equities but offer is low-ticket course","No VSL to move audience from free content to high-ticket","No discovery call or Calendly found"],green:"Equities audience skews US — ideal market match. 55K = large pool with high-ticket upside.",offer:"Equity / stock trading coaching",status:"none",notes:"",updated:null},
+  {id:36,handle:"@breakouttrades",name:"Breakout Trades",niche:"daytrading",followers:"~26K",fn:26,score:8,av:"t",leaks:["Breakout strategy content — in-demand niche with loyal buyers","No structured intake or VSL found","Content consistent but monetisation infrastructure absent"],green:"Breakout + momentum trading is a perennial best-seller niche. Audience is action-oriented and converts well when shown a clear transformation in a VSL.",offer:"Breakout / momentum day trading",status:"none",notes:"",updated:null},
+  {id:37,handle:"@wealthalchemist_fx",name:"Wealth Alchemist FX",niche:"futures",followers:"~31K",fn:31,score:8,av:"c",leaks:["Mystique branding with no funnel infrastructure","No VSL that matches the brand promise","Offer gated entirely behind DMs"],green:"Strong brand identity = emotionally resonant audience. Buyers are pre-sold on the persona — just missing the infrastructure to close them at scale.",offer:"Forex / futures mentorship",status:"none",notes:"",updated:null},
+  {id:38,handle:"@optionsflowtrader",name:"Options Flow Trader",niche:"options",followers:"~48K",fn:48,score:8,av:"g",leaks:["Options flow/darkpool niche — niche buyers with high conviction","No VSL or landing page found","Likely selling alerts/Discord, not high-ticket mentorship"],green:"Options flow trading is a premium niche — buyers perceive huge edge. Moving them to high-ticket mentorship with a VSL showing flow-reading in action = easy sell.",offer:"Options flow alerts + education",status:"none",notes:"",updated:null},
+  {id:39,handle:"@the.funded.trader.mentor",name:"Funded Trader Mentor",niche:"futures",followers:"~34K",fn:34,score:9,av:"p",leaks:["Funded trader angle with no structured VSL funnel","34K followers — prop firm audience is extremely high-intent","No booking page or intake form found"],green:"Funded trader niche = buyer who has already decided to invest in their trading career. The highest-intent audience in all of trading edu.",offer:"Prop firm / funded trader mentorship",status:"none",notes:"🔥 Highest-intent niche. These buyers are ready to spend.",updated:null},
+  {id:40,handle:"@cryptodiscipline",name:"Crypto Discipline",niche:"crypto",followers:"~23K",fn:23,score:8,av:"a",leaks:["Mindset + crypto combo — undermonetised despite strong community trust","No VSL or intake system found","Content quality high but offer is buried or absent"],green:"Discipline/mindset crypto angle = sticky, high-trust audience. These followers are loyal and convert extremely well when offered a structured path.",offer:"Crypto trading + mindset coaching",status:"none",notes:"",updated:null}
+];
+
+// ─── STATE ───────────────────────────────────────────────────────────
+let prospects = [];
+let expanded = null;
+let filter = 'all';
+let sortKey = 'score';
+let sortDir = -1;
+let editingId = null;
+
+function loadData() {
+  const saved = localStorage.getItem('aventio_prospects_v2');
+  if (saved) {
+    prospects = JSON.parse(saved);
+  } else {
+    prospects = DEFAULT_PROSPECTS.map(p => ({...p}));
+    saveData();
+  }
+}
+
+function saveData() {
+  localStorage.setItem('aventio_prospects_v2', JSON.stringify(prospects));
+}
+
+// ─── FILTERS & SORT ──────────────────────────────────────────────────
+function setFilter(f, btn) {
+  filter = f;
+  document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  expanded = null;
+  renderTable();
+}
+
+function sortBy(key) {
+  if (sortKey === key) sortDir *= -1;
+  else { sortKey = key; sortDir = -1; }
+  document.querySelectorAll('.tbl th').forEach(th => th.classList.remove('sorted'));
+  renderTable();
+}
+
+function getFiltered() {
+  const q = document.getElementById('search-inp').value.toLowerCase();
+  return prospects.filter(p => {
+    const matchSearch = !q || p.handle.toLowerCase().includes(q) || p.name.toLowerCase().includes(q) || p.niche.toLowerCase().includes(q);
+    let matchFilter = true;
+    if (filter === 'hot') matchFilter = p.score >= 9;
+    else if (filter === 'queued') matchFilter = p.status === 'queued';
+    else if (filter === 'loom') matchFilter = p.status === 'loom';
+    else if (filter === 'replied') matchFilter = p.status === 'replied' || p.status === 'closed';
+    else if (['forex','options','futures','crypto','daytrading','stocks'].includes(filter)) matchFilter = p.niche === filter;
+    return matchSearch && matchFilter;
+  }).sort((a,b) => {
+    let av = a[sortKey], bv = b[sortKey];
+    if (sortKey === 'followers') { av = a.fn; bv = b.fn; }
+    if (av < bv) return sortDir;
+    if (av > bv) return -sortDir;
+    return 0;
+  });
+}
+
+// ─── RENDER ──────────────────────────────────────────────────────────
+const STATUS_META = {
+  none:    { label: 'Not contacted', cls: 'p-none' },
+  queued:  { label: 'Queued',        cls: 'p-queued' },
+  dm:      { label: 'DM\'d',          cls: 'p-dm' },
+  loom:    { label: 'Loom sent',     cls: 'p-loom' },
+  replied: { label: 'Replied',       cls: 'p-replied' },
+  closed:  { label: 'Closed 🎉',     cls: 'p-closed' },
+  pass:    { label: 'Pass',          cls: 'p-pass' }
+};
+
+const AV_CLASS = { b:'av-b', t:'av-t', a:'av-a', c:'av-c', p:'av-p', g:'av-g' };
+const SCORE_CLASS = { 9:'sb-9', 8:'sb-8', 7:'sb-7', 6:'sb-6' };
+
+function initials(p) {
+  return (p.handle || '??').replace('@','').slice(0,2).toUpperCase();
+}
+
+function scoreClass(n) {
+  if (n >= 9) return 'sb-9';
+  if (n >= 8) return 'sb-8';
+  if (n >= 7) return 'sb-7';
+  return 'sb-6';
+}
+
+function leakDots(leaks) {
+  const n = leaks.length;
+  return `<div class="leak-dots">${leaks.map((l,i)=>`<div class="leak-dot${i<2?' hi':''}"></div>`).join('')}</div>`;
+}
+
+function fmtDate(ts) {
+  if (!ts) return '—';
+  const d = new Date(ts);
+  return d.toLocaleDateString('en-GB', {day:'numeric', month:'short'});
+}
+
+function renderTable() {
+  const rows = getFiltered();
+  const body = document.getElementById('tbl-body');
+  const empty = document.getElementById('empty-state');
+
+  updateStats();
+  updateTodayStrip();
+
+  if (rows.length === 0) {
+    body.innerHTML = '';
+    empty.classList.remove('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+
+  const sm = STATUS_META;
+  let html = '';
+
+  rows.forEach(p => {
+    const av = AV_CLASS[p.av] || 'av-b';
+    const sc = scoreClass(p.score);
+    const st = sm[p.status] || sm.none;
+    const isExp = expanded === p.id;
+    const leaks = Array.isArray(p.leaks) ? p.leaks : (p.leaks||'').split('\n').filter(Boolean);
+
+    html += `<tr class="${isExp?'expanded':''}" onclick="toggleRow(${p.id})">
+      <td>
+        <div class="handle-cell">
+          <div class="av ${av}">${initials(p)}</div>
+          <div>
+            <div class="handle-name">${p.handle}</div>
+            <div class="handle-sub">${p.name}</div>
+          </div>
+        </div>
+      </td>
+      <td><span class="score-badge ${sc}">${p.score}</span></td>
+      <td><span class="niche-tag">${p.niche}</span></td>
+      <td><span class="fol-num">${p.followers}</span></td>
+      <td onclick="event.stopPropagation()">
+        <span class="pill ${st.cls}" onclick="cycleStatus(${p.id})">${st.label}</span>
+      </td>
+      <td>${leakDots(leaks)}</td>
+      <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--ink-soft)">${fmtDate(p.updated)}</td>
+    </tr>`;
+
+    if (isExp) {
+      const green = p.green || p.greenFlags || '';
+      html += `<tr class="exp-row"><td colspan="7">
+        <div class="exp-inner">
+          <div class="exp-section">
+            <h4>Funnel leaks</h4>
+            <ul class="leak-list">${leaks.map(l=>`<li>${l}</li>`).join('')}</ul>
+          </div>
+          <div class="exp-section">
+            <h4>Why they fit</h4>
+            <p class="why-text">${green}</p>
+            <br><h4 style="margin-top:8px">Offer</h4>
+            <p class="why-text">${p.offer||'—'}</p>
+            ${p.notes?`<br><p class="note-text">${p.notes}</p>`:''}
+          </div>
+          <div class="exp-section">
+            <h4>Update status</h4>
+            <div class="status-sel">
+              ${Object.entries(sm).map(([k,v])=>`<button class="s-opt${p.status===k?' active':''}" onclick="setStatus(${p.id},'${k}')">${v.label}</button>`).join('')}
+            </div>
+            <h4 style="margin-top:12px">Notes</h4>
+            <textarea class="notes-area" id="note-${p.id}" onblur="saveNote(${p.id})" onclick="event.stopPropagation()">${p.notes||''}</textarea>
+            <div class="action-strip">
+              <button class="act-btn" onclick="editProspect(${p.id});event.stopPropagation()">Edit</button>
+              <button class="act-btn" onclick="deleteProspect(${p.id});event.stopPropagation()" style="color:var(--red-brick)">Delete</button>
+              <button class="act-btn prim" onclick="draftLoom(${p.id});event.stopPropagation()">Draft Loom ↗</button>
+            </div>
+          </div>
+        </div>
+      </td></tr>`;
+    }
+  });
+
+  body.innerHTML = html;
+}
+
+function toggleRow(id) {
+  expanded = expanded === id ? null : id;
+  renderTable();
+}
+
+function cycleStatus(id) {
+  const order = ['none','queued','dm','loom','replied','closed','pass'];
+  const p = prospects.find(x => x.id === id);
+  if (!p) return;
+  const idx = order.indexOf(p.status);
+  p.status = order[(idx + 1) % order.length];
+  p.updated = Date.now();
+  saveData();
+  renderTable();
+}
+
+function setStatus(id, status) {
+  const p = prospects.find(x => x.id === id);
+  if (!p) return;
+  p.status = status;
+  p.updated = Date.now();
+  saveData();
+  renderTable();
+}
+
+function saveNote(id) {
+  const el = document.getElementById('note-' + id);
+  if (!el) return;
+  const p = prospects.find(x => x.id === id);
+  if (!p) return;
+  p.notes = el.value;
+  p.updated = Date.now();
+  saveData();
+}
+
+function deleteProspect(id) {
+  if (!confirm('Delete this prospect?')) return;
+  prospects = prospects.filter(x => x.id !== id);
+  expanded = null;
+  saveData();
+  renderTable();
+}
+
+// ─── STATS ───────────────────────────────────────────────────────────
+function updateStats() {
+  const total = prospects.length;
+  document.getElementById('total-count').textContent = total;
+  document.getElementById('goal-fill').style.width = Math.min(100, (total / 80) * 100) + '%';
+  document.getElementById('stat-hot').textContent = prospects.filter(p => p.score >= 9).length;
+  document.getElementById('stat-queued').textContent = prospects.filter(p => p.status === 'queued').length;
+  document.getElementById('stat-loom').textContent = prospects.filter(p => p.status === 'loom').length;
+  document.getElementById('stat-replied').textContent = prospects.filter(p => p.status === 'replied').length;
+  document.getElementById('stat-closed').textContent = prospects.filter(p => p.status === 'closed').length;
+}
+
+// ─── TODAY STRIP ─────────────────────────────────────────────────────
+function updateTodayStrip() {
+  const queued = prospects.filter(p => p.status === 'queued').slice(0, 5);
+  const hotUncontacted = prospects.filter(p => p.score >= 9 && p.status === 'none').slice(0, 5 - queued.length);
+  const targets = [...queued, ...hotUncontacted].slice(0, 5);
+  const container = document.getElementById('today-targets');
+  if (targets.length === 0) {
+    container.innerHTML = '<span style="font-size:12px;color:rgba(255,255,255,0.6);font-style:italic">Queue some prospects to see today\'s focus</span>';
+  } else {
+    container.innerHTML = targets.map(p => `<span class="today-tag" onclick="scrollTo(${p.id})">${p.handle}</span>`).join('');
+  }
+  const sent = prospects.filter(p => p.status === 'loom' || p.status === 'dm').length;
+  const tips = [
+    'Stay in the tracker. Don\'t open IG until you\'ve locked 5 targets.',
+    `${sent} Looms sent so far. Momentum builds.`,
+    'One focused session beats a scattered day.',
+    'The funnel leak is visible. You\'re the fix.',
+  ];
+  document.getElementById('today-tip').textContent = tips[sent % tips.length];
+}
+
+function scrollTo(id) {
+  expanded = id;
+  filter = 'all';
+  document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.fbtn')[0].classList.add('active');
+  renderTable();
+  setTimeout(() => {
+    const rows = document.querySelectorAll('#tbl-body tr');
+    rows.forEach(r => { if (r.classList.contains('expanded')) r.scrollIntoView({behavior:'smooth',block:'center'}); });
+  }, 100);
+}
+
+// ─── MODAL ───────────────────────────────────────────────────────────
+function openModal(id) {
+  editingId = id || null;
+  const modal = document.getElementById('modal-overlay');
+  document.getElementById('modal-title').textContent = id ? 'Edit Prospect' : 'Add Prospect';
+  if (id) {
+    const p = prospects.find(x => x.id === id);
+    if (p) {
+      document.getElementById('f-handle').value = p.handle || '';
+      document.getElementById('f-name').value = p.name || '';
+      document.getElementById('f-niche').value = p.niche || 'forex';
+      document.getElementById('f-followers').value = p.followers || '';
+      document.getElementById('f-score').value = p.score || 8;
+      document.getElementById('f-status').value = p.status || 'none';
+      document.getElementById('f-offer').value = p.offer || '';
+      const leaks = Array.isArray(p.leaks) ? p.leaks.join('\n') : (p.leaks || '');
+      document.getElementById('f-leaks').value = leaks;
+      document.getElementById('f-green').value = p.green || p.greenFlags || '';
+      document.getElementById('f-notes').value = p.notes || '';
+    }
+  } else {
+    ['f-handle','f-name','f-followers','f-offer','f-leaks','f-green','f-notes'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('f-score').value = 8;
+    document.getElementById('f-niche').value = 'forex';
+    document.getElementById('f-status').value = 'none';
+  }
+  modal.classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  editingId = null;
+}
+
+function saveProspect() {
+  const handle = document.getElementById('f-handle').value.trim();
+  if (!handle) { alert('Handle is required'); return; }
+
+  const leaksRaw = document.getElementById('f-leaks').value.trim();
+  const leaks = leaksRaw.split('\n').filter(Boolean);
+
+  if (editingId) {
+    const p = prospects.find(x => x.id === editingId);
+    if (p) {
+      p.handle = handle;
+      p.name = document.getElementById('f-name').value.trim();
+      p.niche = document.getElementById('f-niche').value;
+      p.followers = document.getElementById('f-followers').value.trim();
+      p.score = parseInt(document.getElementById('f-score').value) || 8;
+      p.status = document.getElementById('f-status').value;
+      p.offer = document.getElementById('f-offer').value.trim();
+      p.leaks = leaks;
+      p.green = document.getElementById('f-green').value.trim();
+      p.notes = document.getElementById('f-notes').value.trim();
+      p.updated = Date.now();
+    }
+  } else {
+    const av = ['b','t','a','c','p','g'][Math.floor(Math.random()*6)];
+    prospects.push({
+      id: Date.now(),
+      handle,
+      name: document.getElementById('f-name').value.trim(),
+      niche: document.getElementById('f-niche').value,
+      followers: document.getElementById('f-followers').value.trim(),
+      fn: parseInt(document.getElementById('f-followers').value) || 0,
+      score: parseInt(document.getElementById('f-score').value) || 8,
+      av,
+      leaks,
+      green: document.getElementById('f-green').value.trim(),
+      offer: document.getElementById('f-offer').value.trim(),
+      status: document.getElementById('f-status').value,
+      notes: document.getElementById('f-notes').value.trim(),
+      updated: Date.now()
+    });
+  }
+
+  saveData();
+  closeModal();
+  renderTable();
+}
+
+function editProspect(id) {
+  expanded = null;
+  openModal(id);
+}
+
+function draftLoom(id) {
+  const p = prospects.find(x => x.id === id);
+  if (!p) return;
+  const leaks = Array.isArray(p.leaks) ? p.leaks[0] : '';
+  alert(`Copy this prompt into Claude:\n\nWrite me a personalised Loom outreach script for ${p.handle} (${p.name}), ${p.niche} trading mentor with ${p.followers} followers.\n\nKey funnel leak: ${leaks}\nTheir offer: ${p.offer}\n\nUse the Aventio revenue-share angle: no upfront cost, we build the full funnel (VSL, landing page, email sequence), we take 20% of revenue generated. Keep it under 90 seconds, authentic tone.`);
+}
+
+// ─── CLOCK ───────────────────────────────────────────────────────────
+function updateClock() {
+  const now = new Date();
+  const day = now.toLocaleDateString('en-GB', {weekday:'long', day:'numeric', month:'long'});
+  const time = now.toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'});
+  document.getElementById('clock-display').innerHTML = `${day}<br>${time} · Tampere, Finland`;
+}
+
+// ─── EXPORT ──────────────────────────────────────────────────────────
+function exportCSV() {
+  const headers = ['Handle','Name','Niche','Followers','Score','Status','Offer','Leaks','Notes','Last Updated'];
+  const rows = prospects.map(p => {
+    const leaks = Array.isArray(p.leaks) ? p.leaks.join(' | ') : (p.leaks||'');
+    return [p.handle,p.name,p.niche,p.followers,p.score,p.status,p.offer,leaks,p.notes,fmtDate(p.updated)].map(v => `"${(v||'').toString().replace(/"/g,'""')}"`).join(',');
+  });
+  const csv = [headers.join(','), ...rows].join('\n');
+  const blob = new Blob([csv], {type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'aventio-prospects.csv';
+  a.click();
+}
+
+// ─── KEYBOARD ────────────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeModal();
+    if (expanded) { expanded = null; renderTable(); }
+  }
+});
+
+document.getElementById('modal-overlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+});
+
+// ─── INIT ────────────────────────────────────────────────────────────
+loadData();
+renderTable();
+updateClock();
+setInterval(updateClock, 30000);
+</script>
+</body>
+</html>
