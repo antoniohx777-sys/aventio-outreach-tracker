@@ -29,10 +29,53 @@
   .email-text { font-size: 14px; line-height: 1.7; }
   .email-text p { margin-bottom: 12px; }
   .email-text a.btn { display: inline-block; background: #1a1a1a; color: #faf6ef; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 700; text-decoration: none; }
+
+  .section-label { text-align: center; font-family: var(--font-display); font-weight: 700; font-size: 13px; color: var(--text); margin: 48px 0 16px; letter-spacing: 0.02em; }
+  .section-label:first-of-type { margin-top: 0; }
+
+  .phone { background: #000; border-radius: 26px; padding: 10px; max-width: 340px; margin: 0 auto 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+  .inbox { background: #faf6ef; color: #1a1a1a; border-radius: 18px; overflow: hidden; max-height: 480px; overflow-y: auto; }
+  .inbox-header { position: sticky; top: 0; background: #faf6ef; padding: 14px 16px 8px; font-family: var(--font-display); font-weight: 700; font-size: 15px; border-bottom: 1px solid rgba(0,0,0,0.08); }
+  .inbox-row { display: flex; gap: 10px; padding: 12px 16px; border-bottom: 1px solid rgba(0,0,0,0.06); }
+  .inbox-row .av { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg,#f2c94c,#b8860b); flex-shrink: 0; }
+  .inbox-row .inbox-main { flex: 1; min-width: 0; }
+  .inbox-row .top-line { display: flex; justify-content: space-between; font-size: 12px; }
+  .inbox-row .sender { font-weight: 700; }
+  .inbox-row .day { color: #999; }
+  .inbox-row .subj { font-size: 12.5px; font-weight: 600; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .inbox-row .snip { font-size: 11.5px; color: #777; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .phone-caption { text-align: center; font-size: 12px; color: var(--text-3); margin-bottom: 40px; }
+
+  .sms-phone .inbox { max-height: none; padding: 16px 12px; display: flex; flex-direction: column; gap: 10px; }
+  .bubble { max-width: 78%; padding: 10px 14px; border-radius: 16px; font-size: 13px; line-height: 1.4; }
+  .bubble.out { align-self: flex-end; background: #f2c94c; color: #1a1200; border-bottom-right-radius: 4px; }
+  .bubble .bts { display: block; font-size: 10px; color: rgba(0,0,0,0.5); margin-top: 4px; }
+
+  .full-copy-label { text-align: center; color: var(--text-3); font-size: 12px; margin-bottom: 24px; }
 </style>
 </head>
 <body>
 <div class="wrap">
+
+<div class="section-label">📱 How it lands on their phone</div>
+<div class="phone"><div class="inbox">
+  <div class="inbox-header">Inbox</div>
+  <div class="inbox-row"><div class="av"></div><div class="inbox-main"><div class="top-line"><span class="sender">Adriel Hsu</span><span class="day">Now</span></div><div class="subj">Here's the replay + your next step</div><div class="snip">Thanks for showing up (or registering)...</div></div></div>
+  <div class="inbox-row"><div class="av"></div><div class="inbox-main"><div class="top-line"><span class="sender">Adriel Hsu</span><span class="day">Mon</span></div><div class="subj">In case you missed the funding pillar...</div><div class="snip">A lot of people tell me this section clicks hardest...</div></div></div>
+  <div class="inbox-row"><div class="av"></div><div class="inbox-main"><div class="top-line"><span class="sender">Adriel Hsu</span><span class="day">Tue</span></div><div class="subj">The full breakdown: $950K → $252K back</div><div class="snip">If you only remember one thing from the training...</div></div></div>
+  <div class="inbox-row"><div class="av"></div><div class="inbox-main"><div class="top-line"><span class="sender">Adriel Hsu</span><span class="day">Wed</span></div><div class="subj">Replay comes down [date]</div><div class="snip">Just a heads up — the replay comes down soon...</div></div></div>
+  <div class="inbox-row"><div class="av"></div><div class="inbox-main"><div class="top-line"><span class="sender">Adriel Hsu</span><span class="day">Thu</span></div><div class="subj">Last chance — replay comes down tonight</div><div class="snip">This is the last email about the replay...</div></div></div>
+</div></div>
+<div class="phone-caption">Scroll inside the phone to see all 5 subject lines as they'd stack in a real inbox.</div>
+
+<div class="section-label">💬 SMS touchpoints (2)</div>
+<div class="phone sms-phone"><div class="inbox">
+  <div class="bubble out">Replay's up if you missed it live: [link]. Comes down [date].<span class="bts">Immediately after</span></div>
+  <div class="bubble out">Replay comes down tonight at midnight — last chance: [link]<span class="bts">Last day</span></div>
+</div></div>
+<div class="phone-caption">Kept short — SMS is for urgency/reminders, not full pitch copy.</div>
+
+<div class="full-copy-label">Full email copy below</div>
 <h1>Post-Webinar Sequence</h1>
 <p class="sub">Replay window → last chance</p>
 <p class="meta">5 emails</p>

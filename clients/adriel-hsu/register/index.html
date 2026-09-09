@@ -7,20 +7,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0b1120;
-    --bg-2: #0f172a;
-    --bg-3: #1b2540;
-    --bg-4: #26315633;
-    --gold: #f2c94c;
-    --gold-glow: rgba(242,201,76,0.12);
-    --gold-border: rgba(242,201,76,0.35);
-    --text: #f5f5f4;
-    --text-2: #a8b0c3;
-    --text-3: #6b7280;
-    --border: rgba(255,255,255,0.08);
-    --border-2: rgba(255,255,255,0.16);
-    --font-display: 'Sora', sans-serif;
-    --font-body: 'Inter', sans-serif;
+    --bg: #0b1120; --bg-2: #0f172a; --bg-3: #1b2540;
+    --gold: #f2c94c; --gold-glow: rgba(242,201,76,0.12); --gold-border: rgba(242,201,76,0.35);
+    --text: #f5f5f4; --text-2: #a8b0c3; --text-3: #6b7280;
+    --border: rgba(255,255,255,0.08); --border-2: rgba(255,255,255,0.16);
+    --red: #ef4444;
+    --font-display: 'Sora', sans-serif; --font-body: 'Inter', sans-serif;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: var(--font-body); line-height: 1.6; }
@@ -43,22 +35,30 @@
   .cta-wrap { text-align: center; margin-bottom: 8px; }
   .cta-sub { text-align: center; color: var(--text-3); font-size: 12px; margin-top: 8px; }
 
-  section.bullets { background: var(--bg-2); border: 1px solid var(--border); border-radius: 12px; padding: 32px; margin: 48px 0; }
-  section.bullets h2 { font-family: var(--font-display); font-size: 20px; font-weight: 700; margin-bottom: 20px; text-align: center; }
-  .bullet-list { list-style: none; }
-  .bullet-list li { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 15px; }
-  .bullet-list li:last-child { border-bottom: none; }
-  .bullet-list .check { color: var(--gold); font-weight: 700; flex-shrink: 0; }
+  .pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 14px; margin: 48px 0; }
+  .pillar-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: 12px; padding: 22px 18px; text-align: center; }
+  .pillar-card .num { font-family: var(--font-display); font-weight: 800; color: var(--gold); font-size: 13px; margin-bottom: 10px; }
+  .pillar-card h3 { font-family: var(--font-display); font-size: 15px; margin-bottom: 8px; }
+  .pillar-card p { font-size: 12.5px; color: var(--text-2); }
+
+  .gift-box { display: flex; align-items: center; gap: 16px; background: var(--bg-2); border: 1px solid var(--gold-border); border-radius: 12px; padding: 20px; margin-bottom: 40px; }
+  .gift-box .icon { font-size: 26px; }
+  .gift-box h3 { font-family: var(--font-display); font-size: 14px; margin-bottom: 4px; }
+  .gift-box p { font-size: 12.5px; color: var(--text-2); }
 
   section.host { display: flex; gap: 20px; align-items: center; padding: 32px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 48px; }
-  .host-avatar { width: 72px; height: 72px; border-radius: 50%; background: var(--bg-3); border: 1px solid var(--border-2); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 800; color: var(--gold); font-size: 22px; }
+  .host-avatar { width: 72px; height: 72px; border-radius: 50%; background: var(--bg-3); border: 1px dashed var(--border-2); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono, monospace); color: var(--text-3); font-size: 9px; text-align: center; line-height: 1.3; padding: 4px; }
   .host-name { font-family: var(--font-display); font-weight: 700; font-size: 16px; margin-bottom: 4px; }
   .host-bio { color: var(--text-2); font-size: 13px; }
 
   .register-box { background: var(--bg-2); border: 1px solid var(--gold-border); border-radius: 12px; padding: 32px; margin-bottom: 40px; }
   .register-box h2 { font-family: var(--font-display); text-align: center; font-size: 20px; margin-bottom: 20px; }
-  .form-row { display: flex; flex-direction: column; gap: 12px; max-width: 400px; margin: 0 auto 16px; }
+  .form-row { display: flex; flex-direction: column; gap: 6px; max-width: 400px; margin: 0 auto 14px; }
   .form-row input { background: var(--bg-3); border: 1px solid var(--border-2); border-radius: 6px; padding: 12px 14px; color: var(--text); font-family: var(--font-body); font-size: 14px; }
+  .form-row input.err { border-color: var(--red); }
+  .form-row .err-msg { display: none; color: var(--red); font-size: 11px; padding-left: 2px; }
+  .form-row.show-err .err-msg { display: block; }
+  #form-status { text-align: center; font-size: 12px; color: var(--gold); margin-top: 10px; min-height: 16px; }
 
   .proof-box { background: var(--bg-3); border: 1px dashed var(--border-2); border-radius: 10px; padding: 20px; color: var(--text-3); font-size: 13px; text-align: center; margin-bottom: 48px; }
 
@@ -77,11 +77,11 @@
     <p class="sub">Free live training for aspiring and active investors ready to stop guessing and start following a repeatable system — no license or big capital required.</p>
   </section>
 
-  <div class="countdown-row">
-    <div class="countdown-cell"><div class="num">03</div><div class="lbl">Days</div></div>
-    <div class="countdown-cell"><div class="num">14</div><div class="lbl">Hours</div></div>
-    <div class="countdown-cell"><div class="num">27</div><div class="lbl">Min</div></div>
-    <div class="countdown-cell"><div class="num">09</div><div class="lbl">Sec</div></div>
+  <div class="countdown-row" id="countdown">
+    <div class="countdown-cell"><div class="num" id="cd-d">--</div><div class="lbl">Days</div></div>
+    <div class="countdown-cell"><div class="num" id="cd-h">--</div><div class="lbl">Hours</div></div>
+    <div class="countdown-cell"><div class="num" id="cd-m">--</div><div class="lbl">Min</div></div>
+    <div class="countdown-cell"><div class="num" id="cd-s">--</div><div class="lbl">Sec</div></div>
   </div>
 
   <div class="cta-wrap">
@@ -89,19 +89,31 @@
     <div class="cta-sub">Live training · [Insert date/time] · Replay available for registrants</div>
   </div>
 
-  <section class="bullets">
-    <h2>On this free training, you'll learn:</h2>
-    <ul class="bullet-list">
-      <li><span class="check">✓</span> The exact framework Adriel used to go from a 9-5 engineer to 66 doors of multifamily cash flow</li>
-      <li><span class="check">✓</span> How one 14-unit deal survived a $17K property-management disaster and a tenant lawsuit — and still returned $252K on refinance</li>
-      <li><span class="check">✓</span> How to find and evaluate your first (or next) deal without a real estate license or a pile of capital sitting around</li>
-      <li><span class="check">✓</span> The real difference between flipping, wholesaling, and buy-and-hold — and which one actually fits your timeline</li>
-      <li><span class="check">✓</span> A clear next step to work directly with Adriel if you want hands-on help applying this to your first deal</li>
-    </ul>
-  </section>
+  <div class="pillars">
+    <div class="pillar-card">
+      <div class="num">PILLAR 1</div>
+      <h3>Find deals</h3>
+      <p>Where real deals actually come from — off-market, wholesaler and agent relationships, deal-flow systems.</p>
+    </div>
+    <div class="pillar-card">
+      <div class="num">PILLAR 2</div>
+      <h3>Evaluate &amp; fund deals</h3>
+      <p>The numbers that separate a good deal from a trap, and how deals actually get financed without six figures in cash.</p>
+    </div>
+    <div class="pillar-card">
+      <div class="num">PILLAR 3</div>
+      <h3>Execute without doing it all yourself</h3>
+      <p>Building a team, systems that don't rely on you personally, and scaling from 1 door to many.</p>
+    </div>
+  </div>
+
+  <div class="gift-box">
+    <div class="icon">🎁</div>
+    <div><h3>Free gift for registering</h3><p>The Deal Evaluation Checklist — the exact non-negotiables checklist used before saying yes to any deal. [Insert real download link]</p></div>
+  </div>
 
   <section class="host">
-    <div class="host-avatar">AH</div>
+    <div class="host-avatar">[Insert real photo]</div>
     <div>
       <div class="host-name">Adriel Hsu</div>
       <div class="host-bio">Former environmental engineer who left his 9-5 in 2021 to invest in real estate full-time. Runs LFTD Properties LLC, operates ~66 doors of multifamily, and has been featured in Yahoo Finance / Benzinga for turning a 14-unit apartment complex into a $250K+ refinance story.</div>
@@ -110,17 +122,59 @@
 
   <div class="register-box" id="register">
     <h2>Save Your Seat</h2>
-    <div class="form-row">
-      <input type="text" placeholder="First name" disabled>
-      <input type="email" placeholder="Email address" disabled>
-    </div>
-    <div class="cta-wrap"><a class="cta-btn" href="../thank-you/">Register Free</a></div>
+    <form id="reg-form" onsubmit="return handleSubmit(event)">
+      <div class="form-row" id="row-name">
+        <input type="text" id="f-name" placeholder="First name">
+        <div class="err-msg">Enter your first name</div>
+      </div>
+      <div class="form-row" id="row-email">
+        <input type="email" id="f-email" placeholder="Email address">
+        <div class="err-msg">Enter a valid email</div>
+      </div>
+      <div class="cta-wrap"><button type="submit" class="cta-btn">Register Free</button></div>
+      <div id="form-status"></div>
+    </form>
   </div>
 
-  <div class="proof-box">[Testimonial from a past client/student — drop in a real one here before this goes live]</div>
+  <div class="proof-box">[Testimonial from a past client/student — no verified one found publicly, drop in a real one here before this goes live]</div>
 
   <footer>THE INVESTORS BLUEPRINT — FUNNEL BUILT BY AVENTIO — SAMPLE, NOT LIVE</footer>
 
 </div>
+
+<script>
+  // Countdown — defaults to 3 days out from page load (Aventio benchmark: 3-4 days max for cold traffic)
+  const target = new Date(Date.now() + 3*24*60*60*1000 + 14*60*60*1000);
+  function tick() {
+    const diff = Math.max(0, target - new Date());
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    document.getElementById('cd-d').textContent = String(d).padStart(2,'0');
+    document.getElementById('cd-h').textContent = String(h).padStart(2,'0');
+    document.getElementById('cd-m').textContent = String(m).padStart(2,'0');
+    document.getElementById('cd-s').textContent = String(s).padStart(2,'0');
+  }
+  tick(); setInterval(tick, 1000);
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const name = document.getElementById('f-name');
+    const email = document.getElementById('f-email');
+    const nameRow = document.getElementById('row-name');
+    const emailRow = document.getElementById('row-email');
+    let ok = true;
+    if (!name.value.trim()) { nameRow.classList.add('show-err'); name.classList.add('err'); ok = false; }
+    else { nameRow.classList.remove('show-err'); name.classList.remove('err'); }
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim());
+    if (!emailOk) { emailRow.classList.add('show-err'); email.classList.add('err'); ok = false; }
+    else { emailRow.classList.remove('show-err'); email.classList.remove('err'); }
+    if (!ok) return false;
+    document.getElementById('form-status').textContent = 'Saving your seat...';
+    setTimeout(() => { window.location.href = '../thank-you/'; }, 700);
+    return false;
+  }
+</script>
 </body>
 </html>

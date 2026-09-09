@@ -36,6 +36,17 @@
   .next-box ol { padding-left: 20px; font-size: 14px; color: var(--text-2); }
   .next-box li { margin-bottom: 8px; }
 
+  .prep-video { text-align: left; margin-bottom: 32px; }
+  .prep-tag { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+  .prep-frame { position: relative; aspect-ratio: 16/9; background: var(--bg-2); border: 1px solid var(--border-2); border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: var(--text-3); font-size: 12px; }
+  .prep-frame .play { width: 44px; height: 44px; border-radius: 50%; background: var(--gold-glow); border: 1px solid var(--gold-border); color: var(--gold); display: flex; align-items: center; justify-content: center; }
+  .prep-note { font-size: 12px; color: var(--text-3); margin-top: 8px; }
+
+  .community-box { display: flex; gap: 14px; align-items: flex-start; text-align: left; background: var(--bg-2); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 32px; }
+  .wa-icon { font-size: 22px; }
+  .community-box h3 { font-family: var(--font-display); font-size: 14px; margin-bottom: 4px; }
+  .community-box p { font-size: 12.5px; color: var(--text-2); }
+
   footer { color: var(--text-3); font-size: 11px; margin-top: 20px; }
 </style>
 </head>
@@ -57,6 +68,15 @@
     <a class="cta-btn-outline" href="#">Share With A Friend</a>
   </div>
 
+  <div class="prep-video">
+    <div class="prep-tag">Watch this first</div>
+    <div class="prep-frame">
+      <div class="play">▶</div>
+      <span>60-second prep video — [insert real recording]</span>
+    </div>
+    <p class="prep-note">Two minutes that'll make the training 10x more useful — don't skip it.</p>
+  </div>
+
   <div class="next-box">
     <h2>What happens next</h2>
     <ol>
@@ -64,6 +84,14 @@
       <li>A few days before the training, you'll get a preview of what we're covering — including how a 14-unit deal turned a $17K property-management disaster into a $252K refinance.</li>
       <li>Can't make it live? No problem — the replay goes out to everyone registered, for a limited window.</li>
     </ol>
+  </div>
+
+  <div class="community-box">
+    <div class="wa-icon">💬</div>
+    <div>
+      <h3>Join the community while you wait</h3>
+      <p>Other people going through the same training, swapping deal breakdowns. [Insert real WhatsApp/community invite link]</p>
+    </div>
   </div>
 
   <footer>THE INVESTORS BLUEPRINT — FUNNEL BUILT BY AVENTIO — SAMPLE, NOT LIVE</footer>
