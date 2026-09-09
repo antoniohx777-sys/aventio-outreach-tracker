@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Investors Blueprint — Webinar Deck</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b1120; --bg-2: #0f172a; --bg-3: #1b2540;
+    --gold: #f2c94c; --gold-glow: rgba(242,201,76,0.12); --gold-border: rgba(242,201,76,0.35);
+    --text: #f5f5f4; --text-2: #a8b0c3; --text-3: #6b7280;
+    --border: rgba(255,255,255,0.08); --border-2: rgba(255,255,255,0.16);
+    --font-display: 'Sora', sans-serif; --font-body: 'Inter', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-body); height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+
+  .topbar { display: flex; align-items: center; justify-content: space-between; padding: 14px 24px; border-bottom: 1px solid var(--border); }
+  .topbar .title { font-family: var(--font-display); font-weight: 700; font-size: 14px; }
+  .topbar .counter { font-family: var(--font-body); font-size: 12px; color: var(--text-3); }
+
+  .stage { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px; position: relative; }
+  .slide { max-width: 760px; width: 100%; text-align: center; }
+  .slide .kicker { font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 18px; }
+  .slide h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(24px, 4vw, 38px); line-height: 1.25; margin-bottom: 24px; }
+  .slide ul { list-style: none; text-align: left; max-width: 560px; margin: 0 auto; }
+  .slide li { font-size: 17px; color: var(--text-2); padding: 8px 0; }
+  .slide li::before { content: "— "; color: var(--gold); }
+
+  .navbar { display: flex; align-items: center; justify-content: center; gap: 16px; padding: 18px 24px; border-top: 1px solid var(--border); }
+  .navbar button { background: var(--bg-2); border: 1px solid var(--border-2); color: var(--text); font-family: var(--font-display); font-weight: 700; font-size: 13px; padding: 10px 18px; border-radius: 8px; cursor: pointer; }
+  .navbar button:disabled { opacity: 0.35; cursor: default; }
+  .navbar button.primary { background: var(--gold); color: #1a1200; border: none; }
+  .progress-track { position: absolute; top: 0; left: 0; height: 3px; background: var(--gold); transition: width 0.2s; }
+</style>
+</head>
+<body>
+
+<div class="progress-track" id="progress"></div>
+<div class="topbar">
+  <div class="title">THE INVESTORS BLUEPRINT — WEBINAR DECK</div>
+  <div class="counter" id="counter">1 / 100</div>
+</div>
+
+<div class="stage">
+  <div class="slide" id="slide">
+    <div class="kicker" id="kicker"></div>
+    <h1 id="heading"></h1>
+    <ul id="bullets"></ul>
+  </div>
+</div>
+
+<div class="navbar">
+  <button id="prevBtn" onclick="go(-1)">← Prev</button>
+  <button class="primary" id="nextBtn" onclick="go(1)">Next →</button>
+</div>
+
+<script>
+const SLIDES = [
+  ["OPENING","The Investors Blueprint",["Live training with Adriel Hsu","[Insert date]"]],
+  ["OPENING","Welcome",["You're in the right place if you want your first (or next) real estate deal","Grab a notebook — this is a working session, not a highlight reel"]],
+  ["OPENING","Quick housekeeping",["Drop your city in the chat","Stay to the end — the last 10 minutes cover exactly how to work with me directly"]],
+  ["OPENING","Tonight's promise",["By the end of this training, you'll know exactly how to find, evaluate, and structure your next deal"]],
+  ["OPENING","What we'll cover",["Where deals actually come from","The numbers that separate a good deal from a trap","How deals get funded without a pile of cash","How to execute without doing it all yourself"]],
+  ["OPENING","Who this is for",["Aspiring investors who haven't done a deal yet","Active investors ready to scale past their first 1-2 deals","Anyone tired of guessing"]],
+  ["OPENING","Who this is NOT for",["Anyone looking for a 'get rich overnight' scheme","Anyone unwilling to do any of the work themselves"]],
+  ["OPENING","Quick question for you",["Show of hands: how many of you have looked at a deal and had no idea if the numbers actually worked?"]],
+
+  ["WHO IS ADRIEL","Quick intro — who am I",["Former environmental engineer","Full-time real estate investor since 2021"]],
+  ["WHO IS ADRIEL","The corporate chapter",["Stable paycheck, clear career ladder","Also a ceiling I could already see"]],
+  ["WHO IS ADRIEL","The leap",["Left the 9-5 in 2021 with no guaranteed income","Most people around me thought it was a mistake"]],
+  ["WHO IS ADRIEL","What I invest in today",["Flips, wholesale deals, new construction, some commercial","Mainly Texas, some nationwide"]],
+  ["WHO IS ADRIEL","Where I am now",["~66 doors of multifamily","Actively moving into syndication and larger value-add deals"]],
+  ["WHO IS ADRIEL","Press feature",["Featured in Yahoo Finance / Benzinga on a 14-unit apartment turnaround","We'll walk through that exact deal later tonight"]],
+  ["WHO IS ADRIEL","Social proof",["~49K on Instagram, 65K+ on TikTok, 1.6M+ likes","Active in the BiggerPockets community"]],
+  ["WHO IS ADRIEL","Why I'm candid, not just highlight-reel",["I'll show you what went wrong, not just what went right","That $17K mistake you're about to hear about? It happened to me"]],
+  ["WHO IS ADRIEL","Why I teach this now",["I wasted years figuring this out alone","This is the framework I wish someone handed me on day one"]],
+  ["WHO IS ADRIEL","Coming up",["Here's exactly what almost made me quit — and what changed everything"]],
+
+  ["THE OLD WAY","The first deal jitters",["No mentor, no system, just guessing"]],
+  ["THE OLD WAY","Buying the 14-unit (2018)",["Bought a 14-unit apartment complex with a vision, not a plan"]],
+  ["THE OLD WAY","The property management disaster",["Lost over $17,000 to a failed property management company"]],
+  ["THE OLD WAY","The tenant lawsuit",["A tenant fell through the second floor — and I got sued"]],
+  ["THE OLD WAY","The near give-up moment",["There was a point I seriously considered selling at a loss"]],
+  ["THE OLD WAY","The breakthrough insight",["The problem wasn't the deal — it was the lack of a repeatable system"]],
+  ["THE OLD WAY","The decision to systemize",["Built processes for vetting contractors, property managers, and tenants"]],
+  ["THE OLD WAY","7.5 years of grinding it out",["Renovations, turnover, operational fixes — slowly turning it around"]],
+  ["THE OLD WAY","The turnaround",["The building became what I call an 'autopilot cash flowing machine'"]],
+  ["THE OLD WAY","Coming up",["That one deal taught me more than any course could have — here's why most investors never get that lesson"]],
+
+  ["WHY MOST PEOPLE STALL","Analysis paralysis",["Researching for months, never making an offer"]],
+  ["WHY MOST PEOPLE STALL","No deal-finding system",["Waiting for the 'perfect' deal to land in their lap"]],
+  ["WHY MOST PEOPLE STALL","Bad numbers",["No real underwriting process — just vibes and hope"]],
+  ["WHY MOST PEOPLE STALL","Trying to do it all solo",["No team, no contractors they trust, no support"]],
+  ["WHY MOST PEOPLE STALL","No idea how to fund it",["Assuming you need six figures in cash to start"]],
+  ["WHY MOST PEOPLE STALL","Chasing the wrong strategy",["Copying HGTV-style flips instead of what actually fits their life"]],
+  ["WHY MOST PEOPLE STALL","Fear of the first deal",["One bad experience away from quitting before they really start"]],
+  ["WHY MOST PEOPLE STALL","Sound familiar?",["That's exactly what the Investors Blueprint fixes"]],
+
+  ["THE INVESTORS BLUEPRINT","Introducing the framework",["The Investors Blueprint: 4 pillars, one repeatable system"]],
+  ["THE INVESTORS BLUEPRINT","What makes it different",["Not theory — the exact process behind the 14-unit turnaround and 66 doors"]],
+  ["THE INVESTORS BLUEPRINT","The 4 pillars",["Finding","Evaluating","Structuring & Funding","Executing"]],
+  ["THE INVESTORS BLUEPRINT","The promise, restated",["Apply this and you'll know exactly how to move on your next deal — not just understand the theory"]],
+  ["THE INVESTORS BLUEPRINT","Roadmap",["We're going pillar by pillar, starting with where deals actually come from"]],
+  ["THE INVESTORS BLUEPRINT","One ask",["Take notes — we're going deep, not staying surface-level"]],
+
+  ["PILLAR 1 — FINDING DEALS","Pillar 1: Finding deals",["Where the real ones actually come from"]],
+  ["PILLAR 1 — FINDING DEALS","Off-market vs on-market",["The MLS is the most competitive place to find a deal, not the best"]],
+  ["PILLAR 1 — FINDING DEALS","Wholesaler relationships",["Building a short list of wholesalers who bring you deals first"]],
+  ["PILLAR 1 — FINDING DEALS","Agent relationships",["Investor-friendly agents see off-market opportunities before they're listed"]],
+  ["PILLAR 1 — FINDING DEALS","Driving for dollars / direct outreach",["Simple, unsexy, still works"]],
+  ["PILLAR 1 — FINDING DEALS","Building a deal-flow system",["Deals should come to you, not the other way around, over time"]],
+  ["PILLAR 1 — FINDING DEALS","Red flags to skip immediately",["Signs a 'deal' is actually a time trap"]],
+  ["PILLAR 1 — FINDING DEALS","Case tie-in",["How the 14-unit actually came onto my radar in the first place"]],
+  ["PILLAR 1 — FINDING DEALS","Deal criteria checklist",["Write down your non-negotiables before you start looking, not after"]],
+  ["PILLAR 1 — FINDING DEALS","Common finding mistakes",["Looking everywhere at once instead of picking one lane first"]],
+
+  ["PILLAR 2 — EVALUATING DEALS","Pillar 2: Evaluating deals",["The numbers that actually matter"]],
+  ["PILLAR 2 — EVALUATING DEALS","The core metrics",["Cap rate, cash-on-cash return, ARV — what each one tells you"]],
+  ["PILLAR 2 — EVALUATING DEALS","The quick gut-check math",["A 60-second way to know if a deal is worth a deeper look"]],
+  ["PILLAR 2 — EVALUATING DEALS","Underwriting, simplified",["You don't need a finance degree — you need one consistent spreadsheet"]],
+  ["PILLAR 2 — EVALUATING DEALS","Running real comps",["Why lazy comps are how people overpay"]],
+  ["PILLAR 2 — EVALUATING DEALS","Expense assumptions people get wrong",["Vacancy, repairs, and management costs are almost always underestimated"]],
+  ["PILLAR 2 — EVALUATING DEALS","The $17K lesson",["What that property-management loss taught me about underwriting for the worst case, not the best case"]],
+  ["PILLAR 2 — EVALUATING DEALS","Red flag numbers",["When the spreadsheet is telling you to walk away — listen to it"]],
+  ["PILLAR 2 — EVALUATING DEALS","Trust the numbers, not the excitement",["A deal that only works if everything goes right isn't a deal"]],
+  ["PILLAR 2 — EVALUATING DEALS","Recap",["If the numbers don't work on paper, they won't work in real life either"]],
+
+  ["PILLAR 3 — STRUCTURING & FUNDING","Pillar 3: Structuring & funding",["How deals actually get paid for"]],
+  ["PILLAR 3 — STRUCTURING & FUNDING","Financing options overview",["Conventional, portfolio loans, hard money, private money"]],
+  ["PILLAR 3 — STRUCTURING & FUNDING","Creative financing basics",["Options that don't require six figures in cash"]],
+  ["PILLAR 3 — STRUCTURING & FUNDING","Seller financing",["When a motivated seller can become your lender"]],
+  ["PILLAR 3 — STRUCTURING & FUNDING","Partnering & raising capital 101",["You don't need all the capital — you need the right partner"]],
+  ["PILLAR 3 — STRUCTURING & FUNDING","The refinance play",["How a refinance recycles your capital into the next deal"]],
+  ["PILLAR 3 — STRUCTURING & FUNDING","The 14-unit refi case",["$950K appraisal, $252K back in my pocket, lower interest rate"]],
+  ["PILLAR 3 — STRUCTURING & FUNDING","Lender relationships",["Why the relationship matters as much as the rate"]],
+  ["PILLAR 3 — STRUCTURING & FUNDING","How much capital you actually need",["Almost always less than people assume"]],
+  ["PILLAR 3 — STRUCTURING & FUNDING","Common funding myths",["'I need to be rich to start' is the #1 myth keeping people out"]],
+
+  ["PILLAR 4 — EXECUTING","Pillar 4: Executing",["Without doing it all yourself"]],
+  ["PILLAR 4 — EXECUTING","Building your team",["Contractor, property manager, lender, agent — your core four"]],
+  ["PILLAR 4 — EXECUTING","Vetting contractors & PMs",["The exact vetting I skipped the first time — and paid $17K for it"]],
+  ["PILLAR 4 — EXECUTING","Systems & SOPs",["Write it down once, stop solving the same problem twice"]],
+  ["PILLAR 4 — EXECUTING","From 1 door to many",["How the systems that saved the 14-unit scaled into 66 doors"]],
+  ["PILLAR 4 — EXECUTING","Avoiding the burnout trap",["Growth without systems just means more stress at a bigger scale"]],
+  ["PILLAR 4 — EXECUTING","Know your role",["Investor vs operator — decide which one you actually want to be"]],
+  ["PILLAR 4 — EXECUTING","Recap",["Execution is where most 'good on paper' deals actually die — here's how to not let that happen"]],
+
+  ["CASE STUDY — THE 14-UNIT","The full story, start to finish",["2018 purchase to today — the complete timeline"]],
+  ["CASE STUDY — THE 14-UNIT","The rough years",["$17K property-management loss, a tenant lawsuit, years of turnover"]],
+  ["CASE STUDY — THE 14-UNIT","The turning point",["Systemizing management and tightening the numbers"]],
+  ["CASE STUDY — THE 14-UNIT","The refinance",["2022: appraised at $950K, $252K cash-out, lower rate"]],
+  ["CASE STUDY — THE 14-UNIT","The result today",["Runs as what I call an 'autopilot cash flowing machine,' roughly $20-30K/year in cash flow"]],
+  ["CASE STUDY — THE 14-UNIT","What this proves",["Following a system turns a rough deal into a real asset — that's the whole point of the Blueprint"]],
+
+  ["THE NEXT STEP","Recap everything",["Finding. Evaluating. Structuring & funding. Executing. That's the whole framework."]],
+  ["THE NEXT STEP","If you want help applying this",["Here's how we can work together directly"]],
+  ["THE NEXT STEP","What happens on the call",["We'll look at where you are and whether the Blueprint is the right next step"]],
+  ["THE NEXT STEP","Who it's for / not for",["For people ready to act on a deal in the next 90 days — not just collect more information"]],
+
+  ["THE INVESTORS BLUEPRINT PROGRAM","Program overview",["A structured mentorship built around the same 4-pillar framework"]],
+  ["THE INVESTORS BLUEPRINT PROGRAM","Module 1 — Finding deals",["Deal-flow systems, off-market sourcing, criteria checklists"]],
+  ["THE INVESTORS BLUEPRINT PROGRAM","Module 2 — Evaluating deals",["Underwriting templates, comps process, red-flag numbers"]],
+  ["THE INVESTORS BLUEPRINT PROGRAM","Module 3 — Structuring & funding",["Financing playbooks, creative deal structures, capital raising basics"]],
+  ["THE INVESTORS BLUEPRINT PROGRAM","Module 4 — Executing",["Team-building, SOPs, scaling from 1 door to many"]],
+  ["THE INVESTORS BLUEPRINT PROGRAM","Coaching & community",["Direct access for deal review and questions as they come up"]],
+  ["THE INVESTORS BLUEPRINT PROGRAM","Bonuses",["[Insert real bonus offers — underwriting spreadsheet template, contractor vetting checklist, etc.]"]],
+  ["THE INVESTORS BLUEPRINT PROGRAM","Guarantee / risk reversal",["[Insert real guarantee terms]"]],
+  ["THE INVESTORS BLUEPRINT PROGRAM","FAQ",["Answers to the 2-3 objections that come up most on calls"]],
+  ["THE INVESTORS BLUEPRINT PROGRAM","Final CTA",["Book a call below to see if the Investors Blueprint is a fit for you"]]
+];
+
+let i = 0;
+function render() {
+  const [kicker, heading, bullets] = SLIDES[i];
+  document.getElementById('kicker').textContent = kicker;
+  document.getElementById('heading').textContent = heading;
+  document.getElementById('bullets').innerHTML = bullets.map(b => '<li>' + b + '</li>').join('');
+  document.getElementById('counter').textContent = (i+1) + ' / ' + SLIDES.length;
+  document.getElementById('prevBtn').disabled = i === 0;
+  document.getElementById('nextBtn').textContent = i === SLIDES.length - 1 ? 'End' : 'Next →';
+  document.getElementById('nextBtn').disabled = i === SLIDES.length - 1;
+  document.getElementById('progress').style.width = ((i+1) / SLIDES.length * 100) + '%';
+}
+function go(d) {
+  const ni = i + d;
+  if (ni >= 0 && ni < SLIDES.length) { i = ni; render(); }
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight') go(1);
+  if (e.key === 'ArrowLeft') go(-1);
+});
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>You're In — The Investors Blueprint</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b1120; --bg-2: #0f172a; --bg-3: #1b2540;
+    --gold: #f2c94c; --gold-glow: rgba(242,201,76,0.12); --gold-border: rgba(242,201,76,0.35);
+    --text: #f5f5f4; --text-2: #a8b0c3; --text-3: #6b7280;
+    --border: rgba(255,255,255,0.08); --border-2: rgba(255,255,255,0.16);
+    --font-display: 'Sora', sans-serif; --font-body: 'Inter', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-body); line-height: 1.6; }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 64px 24px; text-align: center; }
+  .check-badge { width: 64px; height: 64px; border-radius: 50%; background: var(--gold-glow); border: 1px solid var(--gold-border); color: var(--gold); font-size: 28px; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; font-family: var(--font-display); }
+  h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(24px, 4vw, 34px); margin-bottom: 14px; }
+  h1 .accent { color: var(--gold); }
+  p.sub { color: var(--text-2); font-size: 16px; margin-bottom: 40px; }
+
+  .details-box { background: var(--bg-2); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 32px; text-align: left; }
+  .details-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+  .details-row:last-child { border-bottom: none; }
+  .details-row .lbl { color: var(--text-3); }
+  .details-row .val { color: var(--text); font-weight: 600; }
+
+  .btn-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
+  .cta-btn { display: inline-block; background: var(--gold); color: #1a1200; font-family: var(--font-display); font-weight: 700; font-size: 14px; padding: 12px 22px; border-radius: 8px; text-decoration: none; }
+  .cta-btn-outline { display: inline-block; background: transparent; border: 1px solid var(--border-2); color: var(--text); font-family: var(--font-display); font-weight: 700; font-size: 14px; padding: 12px 22px; border-radius: 8px; text-decoration: none; }
+
+  .next-box { text-align: left; background: var(--bg-2); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 32px; }
+  .next-box h2 { font-family: var(--font-display); font-size: 15px; margin-bottom: 14px; }
+  .next-box ol { padding-left: 20px; font-size: 14px; color: var(--text-2); }
+  .next-box li { margin-bottom: 8px; }
+
+  footer { color: var(--text-3); font-size: 11px; margin-top: 20px; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="check-badge">✓</div>
+  <h1>You're in, <span class="accent">your seat is saved</span></h1>
+  <p class="sub">You're registered for The Investors Blueprint free training with Adriel Hsu.</p>
+
+  <div class="details-box">
+    <div class="details-row"><span class="lbl">Training</span><span class="val">The Investors Blueprint</span></div>
+    <div class="details-row"><span class="lbl">Date &amp; time</span><span class="val">[Insert date/time]</span></div>
+    <div class="details-row"><span class="lbl">Where</span><span class="val">Link sent to your email</span></div>
+  </div>
+
+  <div class="btn-row">
+    <a class="cta-btn" href="#">Add To Calendar</a>
+    <a class="cta-btn-outline" href="#">Share With A Friend</a>
+  </div>
+
+  <div class="next-box">
+    <h2>What happens next</h2>
+    <ol>
+      <li>Check your email — your confirmation and a welcome sequence are on the way.</li>
+      <li>A few days before the training, you'll get a preview of what we're covering — including how a 14-unit deal turned a $17K property-management disaster into a $252K refinance.</li>
+      <li>Can't make it live? No problem — the replay goes out to everyone registered, for a limited window.</li>
+    </ol>
+  </div>
+
+  <footer>THE INVESTORS BLUEPRINT — FUNNEL BUILT BY AVENTIO — SAMPLE, NOT LIVE</footer>
+</div>
+</body>
+</html>

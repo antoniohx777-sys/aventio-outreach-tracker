@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free Training: The Investors Blueprint — Adriel Hsu</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b1120;
+    --bg-2: #0f172a;
+    --bg-3: #1b2540;
+    --bg-4: #26315633;
+    --gold: #f2c94c;
+    --gold-glow: rgba(242,201,76,0.12);
+    --gold-border: rgba(242,201,76,0.35);
+    --text: #f5f5f4;
+    --text-2: #a8b0c3;
+    --text-3: #6b7280;
+    --border: rgba(255,255,255,0.08);
+    --border-2: rgba(255,255,255,0.16);
+    --font-display: 'Sora', sans-serif;
+    --font-body: 'Inter', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-body); line-height: 1.6; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+
+  .top-bar { text-align: center; background: var(--gold-glow); border-bottom: 1px solid var(--gold-border); color: var(--gold); font-family: var(--font-body); font-weight: 600; font-size: 12px; letter-spacing: 0.05em; padding: 10px; text-transform: uppercase; }
+
+  .hero { padding: 56px 0 32px; text-align: center; }
+  .hero .eyebrow { font-family: var(--font-body); font-weight: 600; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
+  .hero h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(28px, 4.5vw, 42px); line-height: 1.18; letter-spacing: -0.01em; margin-bottom: 18px; }
+  .hero h1 .accent { color: var(--gold); }
+  .hero .sub { color: var(--text-2); font-size: 17px; max-width: 600px; margin: 0 auto; }
+
+  .countdown-row { display: flex; justify-content: center; gap: 10px; margin: 32px 0; }
+  .countdown-cell { background: var(--bg-2); border: 1px solid var(--border-2); border-radius: 8px; padding: 12px 16px; text-align: center; min-width: 64px; }
+  .countdown-cell .num { font-family: var(--font-display); font-size: 24px; font-weight: 800; color: var(--gold); }
+  .countdown-cell .lbl { font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); margin-top: 4px; }
+
+  .cta-btn { display: inline-block; background: var(--gold); color: #1a1200; font-family: var(--font-display); font-weight: 700; font-size: 15px; padding: 14px 32px; border-radius: 8px; text-decoration: none; text-align: center; border: none; cursor: pointer; }
+  .cta-wrap { text-align: center; margin-bottom: 8px; }
+  .cta-sub { text-align: center; color: var(--text-3); font-size: 12px; margin-top: 8px; }
+
+  section.bullets { background: var(--bg-2); border: 1px solid var(--border); border-radius: 12px; padding: 32px; margin: 48px 0; }
+  section.bullets h2 { font-family: var(--font-display); font-size: 20px; font-weight: 700; margin-bottom: 20px; text-align: center; }
+  .bullet-list { list-style: none; }
+  .bullet-list li { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 15px; }
+  .bullet-list li:last-child { border-bottom: none; }
+  .bullet-list .check { color: var(--gold); font-weight: 700; flex-shrink: 0; }
+
+  section.host { display: flex; gap: 20px; align-items: center; padding: 32px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 48px; }
+  .host-avatar { width: 72px; height: 72px; border-radius: 50%; background: var(--bg-3); border: 1px solid var(--border-2); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 800; color: var(--gold); font-size: 22px; }
+  .host-name { font-family: var(--font-display); font-weight: 700; font-size: 16px; margin-bottom: 4px; }
+  .host-bio { color: var(--text-2); font-size: 13px; }
+
+  .register-box { background: var(--bg-2); border: 1px solid var(--gold-border); border-radius: 12px; padding: 32px; margin-bottom: 40px; }
+  .register-box h2 { font-family: var(--font-display); text-align: center; font-size: 20px; margin-bottom: 20px; }
+  .form-row { display: flex; flex-direction: column; gap: 12px; max-width: 400px; margin: 0 auto 16px; }
+  .form-row input { background: var(--bg-3); border: 1px solid var(--border-2); border-radius: 6px; padding: 12px 14px; color: var(--text); font-family: var(--font-body); font-size: 14px; }
+
+  .proof-box { background: var(--bg-3); border: 1px dashed var(--border-2); border-radius: 10px; padding: 20px; color: var(--text-3); font-size: 13px; text-align: center; margin-bottom: 48px; }
+
+  footer { text-align: center; padding: 20px 0 48px; color: var(--text-3); font-size: 11px; }
+</style>
+</head>
+<body>
+
+<div class="top-bar">Free Live Training · Limited Seats</div>
+
+<div class="wrap">
+
+  <section class="hero">
+    <div class="eyebrow">The Investors Blueprint — Free Training</div>
+    <h1>How A Former Engineer Turned One 14-Unit Deal Into A <span class="accent">$252K Refinance</span> And 66 Doors Of Cash Flow</h1>
+    <p class="sub">Free live training for aspiring and active investors ready to stop guessing and start following a repeatable system — no license or big capital required.</p>
+  </section>
+
+  <div class="countdown-row">
+    <div class="countdown-cell"><div class="num">03</div><div class="lbl">Days</div></div>
+    <div class="countdown-cell"><div class="num">14</div><div class="lbl">Hours</div></div>
+    <div class="countdown-cell"><div class="num">27</div><div class="lbl">Min</div></div>
+    <div class="countdown-cell"><div class="num">09</div><div class="lbl">Sec</div></div>
+  </div>
+
+  <div class="cta-wrap">
+    <a class="cta-btn" href="#register">Save My Seat — It's Free</a>
+    <div class="cta-sub">Live training · [Insert date/time] · Replay available for registrants</div>
+  </div>
+
+  <section class="bullets">
+    <h2>On this free training, you'll learn:</h2>
+    <ul class="bullet-list">
+      <li><span class="check">✓</span> The exact framework Adriel used to go from a 9-5 engineer to 66 doors of multifamily cash flow</li>
+      <li><span class="check">✓</span> How one 14-unit deal survived a $17K property-management disaster and a tenant lawsuit — and still returned $252K on refinance</li>
+      <li><span class="check">✓</span> How to find and evaluate your first (or next) deal without a real estate license or a pile of capital sitting around</li>
+      <li><span class="check">✓</span> The real difference between flipping, wholesaling, and buy-and-hold — and which one actually fits your timeline</li>
+      <li><span class="check">✓</span> A clear next step to work directly with Adriel if you want hands-on help applying this to your first deal</li>
+    </ul>
+  </section>
+
+  <section class="host">
+    <div class="host-avatar">AH</div>
+    <div>
+      <div class="host-name">Adriel Hsu</div>
+      <div class="host-bio">Former environmental engineer who left his 9-5 in 2021 to invest in real estate full-time. Runs LFTD Properties LLC, operates ~66 doors of multifamily, and has been featured in Yahoo Finance / Benzinga for turning a 14-unit apartment complex into a $250K+ refinance story.</div>
+    </div>
+  </section>
+
+  <div class="register-box" id="register">
+    <h2>Save Your Seat</h2>
+    <div class="form-row">
+      <input type="text" placeholder="First name" disabled>
+      <input type="email" placeholder="Email address" disabled>
+    </div>
+    <div class="cta-wrap"><a class="cta-btn" href="../thank-you/">Register Free</a></div>
+  </div>
+
+  <div class="proof-box">[Testimonial from a past client/student — drop in a real one here before this goes live]</div>
+
+  <footer>THE INVESTORS BLUEPRINT — FUNNEL BUILT BY AVENTIO — SAMPLE, NOT LIVE</footer>
+
+</div>
+</body>
+</html>

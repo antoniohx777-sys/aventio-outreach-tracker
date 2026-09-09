@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Replay — The Investors Blueprint</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b1120; --bg-2: #0f172a; --bg-3: #1b2540;
+    --gold: #f2c94c; --gold-glow: rgba(242,201,76,0.12); --gold-border: rgba(242,201,76,0.35);
+    --text: #f5f5f4; --text-2: #a8b0c3; --text-3: #6b7280;
+    --border: rgba(255,255,255,0.08); --border-2: rgba(255,255,255,0.16);
+    --font-display: 'Sora', sans-serif; --font-body: 'Inter', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-body); line-height: 1.6; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  .eyebrow { text-align: center; font-family: var(--font-body); font-weight: 600; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+  h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(24px, 4vw, 34px); text-align: center; margin-bottom: 12px; }
+  p.sub { text-align: center; color: var(--text-2); font-size: 15px; margin-bottom: 32px; }
+
+  .video-wrap { position: relative; padding-bottom: 56.25%; height: 0; border-radius: 12px; overflow: hidden; border: 1px solid var(--border-2); background: var(--bg-2); margin-bottom: 12px; display: flex; align-items: center; justify-content: center; }
+  .video-wrap .play { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: var(--text-3); }
+  .video-wrap .play .icon { width: 56px; height: 56px; border-radius: 50%; background: var(--gold-glow); border: 1px solid var(--gold-border); color: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 20px; }
+  .replay-note { text-align: center; color: var(--text-3); font-size: 12px; margin-bottom: 48px; }
+
+  .app-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: 14px; padding: 32px; }
+  .app-progress { display: flex; gap: 6px; margin-bottom: 24px; }
+  .app-progress .dot { flex: 1; height: 4px; border-radius: 2px; background: var(--bg-3); }
+  .app-progress .dot.done { background: var(--gold); }
+  .app-step { display: none; }
+  .app-step.active { display: block; }
+  .app-step h2 { font-family: var(--font-display); font-size: 18px; margin-bottom: 18px; }
+  .opt-btn { display: block; width: 100%; text-align: left; background: var(--bg-3); border: 1px solid var(--border-2); color: var(--text); font-family: var(--font-body); font-size: 14px; padding: 14px 16px; border-radius: 8px; margin-bottom: 10px; cursor: pointer; transition: border-color 0.15s; }
+  .opt-btn:hover { border-color: var(--gold-border); }
+  .app-nav { display: flex; justify-content: space-between; margin-top: 20px; }
+  .app-nav button { background: transparent; border: 1px solid var(--border-2); color: var(--text-2); font-family: var(--font-body); font-size: 13px; padding: 9px 16px; border-radius: 6px; cursor: pointer; }
+
+  .result-step { display: none; text-align: center; }
+  .result-step.active { display: block; }
+  .result-step .badge { width: 56px; height: 56px; border-radius: 50%; background: var(--gold-glow); border: 1px solid var(--gold-border); color: var(--gold); font-size: 22px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+  .result-step h2 { font-family: var(--font-display); font-size: 20px; margin-bottom: 10px; }
+  .result-step p { color: var(--text-2); font-size: 14px; margin-bottom: 24px; }
+
+  .placeholder-box { position: relative; border-radius: 12px; border: 1px dashed var(--gold-border); background: var(--bg-3); padding: 40px 20px; text-align: center; }
+  .placeholder-box .tag { display: inline-block; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); background: var(--gold-glow); border: 1px solid var(--gold-border); padding: 3px 9px; border-radius: 4px; margin-bottom: 10px; }
+  .placeholder-box p { color: var(--text-3); font-size: 12px; }
+
+  footer { text-align: center; color: var(--text-3); font-size: 11px; margin-top: 40px; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="eyebrow">Replay + Application</div>
+  <h1>The Investors Blueprint — Replay</h1>
+  <p class="sub">Watch the full training below, then apply for a call if you want help applying it to your first (or next) deal.</p>
+
+  <div class="video-wrap">
+    <div class="play"><div class="icon">▶</div><span>Webinar replay — [insert real recording]</span></div>
+  </div>
+  <div class="replay-note">Replay available for a limited time — [insert expiration date]</div>
+
+  <div class="app-card">
+    <div class="app-progress">
+      <div class="dot done" id="dot-1"></div>
+      <div class="dot" id="dot-2"></div>
+      <div class="dot" id="dot-3"></div>
+      <div class="dot" id="dot-4"></div>
+    </div>
+
+    <div class="app-step active" data-step="1">
+      <h2>1. What's your current experience with real estate investing?</h2>
+      <button class="opt-btn" onclick="next()">Total beginner — haven't done a deal yet</button>
+      <button class="opt-btn" onclick="next()">Done 1-2 deals, want to scale</button>
+      <button class="opt-btn" onclick="next()">Active investor, looking to go bigger</button>
+    </div>
+
+    <div class="app-step" data-step="2">
+      <h2>2. What's your main goal right now?</h2>
+      <button class="opt-btn" onclick="next()">Monthly cash flow</button>
+      <button class="opt-btn" onclick="next()">Building long-term equity/appreciation</button>
+      <button class="opt-btn" onclick="next()">Replacing my current income entirely</button>
+    </div>
+
+    <div class="app-step" data-step="3">
+      <h2>3. What's mainly holding you back from your next deal?</h2>
+      <button class="opt-btn" onclick="next()">Don't know how to find/evaluate deals</button>
+      <button class="opt-btn" onclick="next()">Not sure how to fund it</button>
+      <button class="opt-btn" onclick="next()">Have the pieces, just need a system</button>
+    </div>
+
+    <div class="app-step" data-step="4">
+      <h2>4. Are you ready to commit time to this in the next 30 days if it's a fit?</h2>
+      <button class="opt-btn" onclick="finish()">Yes, ready to move</button>
+      <button class="opt-btn" onclick="finish()">Exploring, but serious</button>
+    </div>
+
+    <div class="app-nav" id="nav-back-wrap" style="display:none;">
+      <button onclick="back()">← Back</button>
+      <span></span>
+    </div>
+
+    <div class="result-step" id="result">
+      <div class="badge">✓</div>
+      <h2>You're a fit — let's get you on a call</h2>
+      <p>Based on your answers, book a time below to talk through how the Investors Blueprint framework applies to your specific situation.</p>
+      <div class="placeholder-box">
+        <div class="tag">Placeholder</div>
+        <p>Calendly booking widget goes here — drop in the real embed before this goes live.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>THE INVESTORS BLUEPRINT — FUNNEL BUILT BY AVENTIO — SAMPLE, NOT LIVE</footer>
+</div>
+
+<script>
+  let step = 1;
+  const total = 4;
+  function render() {
+    document.querySelectorAll('.app-step').forEach(el => el.classList.remove('active'));
+    const current = document.querySelector('.app-step[data-step="' + step + '"]');
+    if (current) current.classList.add('active');
+    for (let i = 1; i <= total; i++) {
+      document.getElementById('dot-' + i).classList.toggle('done', i <= step);
+    }
+    document.getElementById('nav-back-wrap').style.display = step > 1 ? 'flex' : 'none';
+  }
+  function next() { if (step < total) { step++; render(); } }
+  function back() { if (step > 1) { step--; render(); } }
+  function finish() {
+    document.querySelectorAll('.app-step').forEach(el => el.classList.remove('active'));
+    document.getElementById('nav-back-wrap').style.display = 'none';
+    document.getElementById('result').classList.add('active');
+  }
+</script>
+</body>
+</html>
