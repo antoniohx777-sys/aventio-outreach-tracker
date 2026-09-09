@@ -1,0 +1,260 @@
+<!--
+  Client pitch page template for the client-landing-page skill.
+  Fill in every {{PLACEHOLDER}}, then delete this comment block.
+  Section order is intentional — see references/page-assembly.md. Do not reorder.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{PROSPECT_NAME}} × Aventio</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --bg-2: #111111;
+    --bg-3: #1a1a1a;
+    --bg-4: #222222;
+    --orange: #f97316;
+    --orange-glow: rgba(249,115,22,0.12);
+    --orange-border: rgba(249,115,22,0.3);
+    --text: #f5f5f5;
+    --text-2: #a3a3a3;
+    --text-3: #666;
+    --border: rgba(255,255,255,0.07);
+    --border-2: rgba(255,255,255,0.12);
+    --font-display: 'Syne', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+    --font-mono: 'DM Mono', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+
+  header.top {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0;
+  }
+  .top-inner { display: flex; align-items: center; justify-content: space-between; }
+  .logo {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .logo-dot { width: 7px; height: 7px; background: var(--orange); border-radius: 50%; }
+  .prepared-for {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--orange);
+    background: var(--orange-glow);
+    border: 1px solid var(--orange-border);
+    padding: 4px 10px;
+    border-radius: 4px;
+  }
+
+  .hero { padding: 56px 0 32px; }
+  .hero h1 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(28px, 4vw, 42px);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin-bottom: 14px;
+  }
+  .hero h1 .accent { color: var(--orange); }
+  .hero p {
+    color: var(--text-2);
+    font-size: 16px;
+    max-width: 640px;
+  }
+
+  .loom-wrap {
+    position: relative;
+    padding-bottom: 62.5%;
+    height: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border-2);
+    margin: 32px 0 8px;
+    background: var(--bg-2);
+  }
+  .loom-wrap iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+
+  section.asset {
+    margin: 48px 0;
+    padding: 28px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+  .asset-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 8px;
+  }
+  section.asset h2 {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+  .asset-body { color: var(--text-2); font-size: 14px; }
+  .asset-body a { color: var(--orange); }
+
+  .deck-list { list-style: none; counter-reset: slide; }
+  .deck-list li {
+    counter-increment: slide;
+    padding: 8px 0 8px 34px;
+    position: relative;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--text);
+  }
+  .deck-list li:last-child { border-bottom: none; }
+  .deck-list li::before {
+    content: counter(slide);
+    position: absolute;
+    left: 0;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--orange);
+    background: var(--orange-glow);
+    border: 1px solid var(--orange-border);
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .email-card, .ad-card {
+    background: var(--bg-3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+  }
+  .email-card .subject { font-family: var(--font-display); font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+  .email-card .snippet { font-size: 13px; color: var(--text-2); }
+  .ad-card .ad-headline { font-family: var(--font-display); font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+  .ad-card .ad-primary { font-size: 13px; color: var(--text-2); }
+
+  .cta-block { text-align: center; padding: 40px 0 12px; }
+  .cta-block h2 {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  .cta-block p { color: var(--text-2); margin-bottom: 20px; }
+
+  .calendly-wrap {
+    border: 1px solid var(--border-2);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 60px;
+  }
+
+  footer.bottom {
+    text-align: center;
+    padding: 20px 0 40px;
+    color: var(--text-3);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.05em;
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap top-inner">
+    <div class="logo"><div class="logo-dot"></div>AVENTIO</div>
+    <span class="prepared-for">Prepared for {{PROSPECT_NAME}}</span>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="hero">
+    <h1>{{HEADLINE}}</h1>
+    <p>{{INTRO_LINE}}</p>
+  </section>
+
+  <!-- LOOM — must stay immediately after the headline -->
+  <div class="loom-wrap">
+    <iframe src="https://www.loom.com/embed/{{LOOM_VIDEO_ID}}" frameborder="0"
+      webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+  </div>
+
+  <!-- ASSET SHOWCASE -->
+  <section class="asset">
+    <div class="asset-label">Sample asset — webinar landing page</div>
+    <h2>{{WEBINAR_LP_HEADLINE}}</h2>
+    <div class="asset-body">{{WEBINAR_LP_PREVIEW_OR_LINK}}</div>
+  </section>
+
+  <section class="asset">
+    <div class="asset-label">Sample asset — webinar presentation deck</div>
+    <h2>{{DECK_TITLE}}</h2>
+    <ol class="deck-list">
+      {{DECK_SLIDE_LIST_ITEMS}}
+    </ol>
+  </section>
+
+  <section class="asset">
+    <div class="asset-label">Sample asset — email sequence</div>
+    <h2>Sales sequence preview</h2>
+    <div class="asset-body">
+      {{EMAIL_PREVIEW_CARDS}}
+    </div>
+  </section>
+
+  <section class="asset">
+    <div class="asset-label">Sample asset — ad copy</div>
+    <h2>Ad concepts</h2>
+    <div class="asset-body">
+      {{AD_PREVIEW_CARDS}}
+    </div>
+  </section>
+
+  <section class="asset">
+    <div class="asset-label">Sample asset — video ad scripts</div>
+    <h2>Video ad concepts</h2>
+    <div class="asset-body">
+      {{VIDEO_AD_PREVIEW}}
+    </div>
+  </section>
+
+  <div class="cta-block">
+    <h2>Want this built for real?</h2>
+    <p>Book a quick call and we'll walk through it.</p>
+  </div>
+
+  <div class="calendly-wrap">
+    <iframe src="https://calendly.com/{{CALENDLY_SLUG}}?embed_domain={{EMBED_DOMAIN}}&embed_type=Inline"
+      width="100%" height="700" frameborder="0"></iframe>
+  </div>
+
+  <footer class="bottom">AVENTIO — {{SENDER_SIGNATURE}}</footer>
+
+</div>
+</body>
+</html>
